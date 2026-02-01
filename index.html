@@ -79,7 +79,7 @@
 
       // ✅ ตรวจสอบยูสเซอร์ Admin/@Admin
       if (username === "Admin" && password === "@Admin") {
-        window.location.href = "./Dashboard.html";
+        window.location.href = "Dashboard.html"; // ใช้ชื่อไฟล์จริง
         return;
       }
 
@@ -93,7 +93,7 @@
 
         const text = await res.text();
         if (text.includes("ล็อกอินสำเร็จ")) {
-          window.location.href = "./Dashboard.html";
+          window.location.href = "Dashboard.html";
         } else {
           document.getElementById("result").innerText = text;
         }
@@ -104,4 +104,3 @@
   </script>
 </body>
 </html>
-
