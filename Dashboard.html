@@ -41,6 +41,13 @@
       text-align: center;
     }
     h1 { color: #333; }
+    .version {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 14px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -54,11 +61,4 @@
     <p>คุณได้เข้าสู่ระบบเรียบร้อยแล้ว</p>
   </div>
 
-  <script>
-    function logout() {
-      alert("คุณได้ออกจากระบบแล้ว");
-      window.location.href = "login.html";
-    }
-  </script>
-</body>
-</html>
+  <div class="version">Version 
