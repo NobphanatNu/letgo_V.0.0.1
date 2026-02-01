@@ -22,6 +22,7 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       width: 300px;
+      position: relative;
     }
     h1 { margin-bottom: 20px; color: #333; }
     input {
@@ -45,6 +46,13 @@
     a { color: #007BFF; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #444; }
+    .version {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 14px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -56,9 +64,10 @@
       <input type="password" id="regPassword" placeholder="รหัสผ่าน" required>
       <button type="submit">สมัคร</button>
     </form>
-    <p>มีบัญชีแล้ว? <a href="login.html">เข้าสู่ระบบที่นี่</a></p>
+    <p>มีบัญชีแล้ว? <a href="index.html">เข้าสู่ระบบที่นี่</a></p>
     <div id="result"></div>
   </div>
+  <div class="version">Version 0.0.1</div>
 
   <script>
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
