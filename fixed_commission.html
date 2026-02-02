@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>คำนวณค่าคอมตายตัว</title>
+
+<link href="https://fonts.googleapis.com/css2?family=TH+Sarabun+New&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'TH Sarabun New', sans-serif;
+  background: #f4f4f9;
+  margin: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #333;
+  color: white;
+  padding: 15px 20px;
+}
+
+.left-area {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+nav a {
+  color: #ddd;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+
+nav a.active,
+nav a:hover {
+  background: #555;
+  color: #fff;
+}
+
+.user-area {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.logout {
+  background: #e74c3c;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 400px;
+  background: white;
+  margin: 50px auto;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+label {
+  font-size: 16px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0 15px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  background: #2ecc71;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #27ae60;
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #333;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="left-area">
+    <strong>คำนวณค่าคอมมิชชั่น</strong>
+    <nav>
+      <a href="dashboard.html">หน้าหลัก</a>
+      <a href="fixed_commission.html" class="active">คอมตายตัว</a>
+      <a href="percent_commission.html">คอมเปอร์เซ็นต์</a>
+    </nav>
+  </div>
+
+  <div class="user-area">
+    ผู้ใช้งาน: <strong>Admin</strong>
+    <a href="index.html" class="logout">Logout</a>
+  </div>
+</header>
+
+<div class="container">
+  <h2>คำนวณค่าคอมตายตัว</h2>
+
+  <label>จำนวนสินค้าที่ขายได้</label>
+  <input type="number" id="qty">
+
+  <label>ค่าคอมต่อชิ้น (บาท)</label>
+  <input type="number" id="commission">
+
+  <button onclick="calculate()">คำนวณ</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+function calculate() {
+  let qty = document.getElementById("qty").value;
+  let commission = document.getElementById("commission").value;
+
+  let total = qty * commission;
+
+  document.getElementById("result").innerHTML =
+    "ค่าคอมทั้งหมด = <strong>" + total.toLocaleString() + "</strong> บาท";
+}
+</script>
+
+</body>
+</html>
