@@ -101,17 +101,35 @@ input {
   text-align: center;
 }
 
+/* ===== QTY CONTROL ===== */
+.qty-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.qty-control button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: #555;
+  color: white;
+  font-size: 16px;
+}
+
+.qty-control button:hover {
+  background: #333;
+}
+
 /* ===== BUTTONS ===== */
 .btn {
   padding: 6px 12px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.add {
-  background: #27ae60;
-  color: white;
 }
 
 .delete {
@@ -164,6 +182,7 @@ input {
         <th>ชื่อสินค้า</th>
         <th>ราคาสินค้า</th>
         <th>ค่าคอมต่อชิ้น</th>
+        <th>จำนวนที่ขายได้</th>
         <th>รวมค่าคอม</th>
         <th>จัดการ</th>
       </tr>
@@ -174,10 +193,15 @@ input {
         <td><input type="text" placeholder="ชื่อสินค้า"></td>
         <td><input type="number" value="0"></td>
         <td><input type="number" value="0" oninput="calculate(this)"></td>
-        <td class="total">0</td>
         <td>
-          <button class="btn delete" onclick="deleteRow(this)">ลบ</button>
+          <div class="qty-control">
+            <button onclick="changeQty(this,-1)">➖</button>
+            <input type="number" value="1" min="0" oninput="calculate(this)">
+            <button onclick="changeQty(this,1)">➕</button>
+          </div>
         </td>
+        <td class="total">0</td>
+        <td><button class="btn delete" onclick="deleteRow(this)">ลบ</button></td>
       </tr>
     </tbody>
   </table>
@@ -189,37 +213,52 @@ input {
 
 <script>
 function addRow() {
-  const table = document.getElementById("commissionTable").getElementsByTagName("tbody")[0];
-  const rowCount = table.rows.length;
-  const row = table.insertRow();
+  const tbody = document.querySelector("#commissionTable tbody");
+  const index = tbody.rows.length + 1;
 
+  const row = tbody.insertRow();
   row.innerHTML = `
-    <td>${rowCount + 1}</td>
+    <td>${index}</td>
     <td><input type="text" placeholder="ชื่อสินค้า"></td>
     <td><input type="number" value="0"></td>
     <td><input type="number" value="0" oninput="calculate(this)"></td>
+    <td>
+      <div class="qty-control">
+        <button onclick="changeQty(this,-1)">➖</button>
+        <input type="number" value="1" min="0" oninput="calculate(this)">
+        <button onclick="changeQty(this,1)">➕</button>
+      </div>
+    </td>
     <td class="total">0</td>
     <td><button class="btn delete" onclick="deleteRow(this)">ลบ</button></td>
   `;
 }
 
 function deleteRow(btn) {
-  const row = btn.parentNode.parentNode;
-  row.remove();
+  btn.closest("tr").remove();
   updateIndex();
 }
 
 function updateIndex() {
-  const rows = document.querySelectorAll("#commissionTable tbody tr");
-  rows.forEach((row, index) => {
-    row.cells[0].innerText = index + 1;
+  document.querySelectorAll("#commissionTable tbody tr").forEach((row, i) => {
+    row.cells[0].innerText = i + 1;
   });
 }
 
-function calculate(input) {
-  const row = input.parentNode.parentNode;
-  const commission = input.value || 0;
-  row.querySelector(".total").innerText = commission;
+function changeQty(btn, value) {
+  const input = btn.parentNode.querySelector("input");
+  let qty = parseInt(input.value) || 0;
+  qty += value;
+  if (qty < 0) qty = 0;
+  input.value = qty;
+  calculate(input);
+}
+
+function calculate(el) {
+  const row = el.closest("tr");
+  const commission = parseFloat(row.cells[3].querySelector("input").value) || 0;
+  const qty = parseInt(row.cells[4].querySelector("input").value) || 0;
+  row.querySelector(".total").innerText = commission * qty;
 }
 </script>
 
