@@ -3,82 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <title>Dashboard</title>
-
 <link href="https://fonts.googleapis.com/css2?family=TH+Sarabun+New&display=swap" rel="stylesheet">
 
 <style>
-body{
-  font-family:'TH Sarabun New',sans-serif;
-  background:#f4f4f9;
-  margin:0;
+body {
+  margin: 0;
+  font-family: 'TH Sarabun New', sans-serif;
+  background: #f4f4f9;
 }
 
-/* ===== Header ===== */
-header{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:70px;
-  background:#333;
-  color:#fff;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0 20px;
-  box-sizing:border-box;
-  z-index:1000;
+/* ===== HEADER ===== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #333;
+  color: white;
+  z-index: 1000;
 }
 
-.left-area{
-  display:flex;
-  align-items:center;
-  gap:30px;
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
 }
 
-.title{
-  font-weight:bold;
+.title {
+  font-size: 20px;
+  font-weight: bold;
 }
 
-nav a{
-  color:#ddd;
-  text-decoration:none;
-  padding:6px 12px;
-  border-radius:5px;
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-nav a:hover,
-nav a.active{
-  background:#555;
-  color:#fff;
+.logout {
+  background: #e74c3c;
+  padding: 6px 12px;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
 }
 
-.user-area{
-  display:flex;
-  align-items:center;
-  gap:15px;
+.header-nav {
+  display: flex;
+  gap: 10px;
+  padding: 8px 20px;
+  background: #444;
 }
 
-.logout{
-  background:#e74c3c;
-  color:#fff;
-  padding:6px 12px;
-  border-radius:5px;
-  text-decoration:none;
+.header-nav a {
+  color: white;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 5px;
 }
 
-/* ===== Content ===== */
-.container{
-  margin-top:110px;
-  text-align:center;
+.header-nav a.active,
+.header-nav a:hover {
+  background: #666;
 }
 
-.footer{
-  position:fixed;
-  bottom:10px;
-  right:20px;
-  font-size:14px;
-  color:#666;
+/* ===== CONTENT ===== */
+.container {
+  margin-top: 130px;
+  text-align: center;
+}
+
+.footer {
+  position: fixed;
+  bottom: 15px;
+  right: 20px;
+  color: #444;
 }
 </style>
 </head>
@@ -86,24 +86,24 @@ nav a.active{
 <body>
 
 <header>
-  <div class="left-area">
+  <div class="header-top">
     <div class="title">เว็บไซต์บันทึกและคำนวณค่าคอมมิชชั่น</div>
-    <nav>
-      <a href="/Dashboard.html" class="active">หน้าหลัก</a>
-      <a href="/fixed_commission.html">คำนวณค่าคอมตายตัว</a>
-      <a href="/percent_commission.html">คำนวณค่าคอมเปอร์เซ็นต์</a>
-    </nav>
+    <div class="user-area">
+      ผู้ใช้งาน: <strong>Admin</strong>
+      <a href="/index.html" class="logout">Logout</a>
+    </div>
   </div>
 
-  <div class="user-area">
-    ผู้ใช้งาน: <strong>Admin</strong>
-    <a href="/index.html" class="logout">Logout</a>
-  </div>
+  <nav class="header-nav">
+    <a href="/Dashboard.html" class="active">หน้าหลัก</a>
+    <a href="/fixed_commission.html">คำนวณค่าคอมตายตัว</a>
+    <a href="/percent_commission.html">คำนวณค่าคอมเปอร์เซ็นต์</a>
+  </nav>
 </header>
 
 <div class="container">
-  <h1>ยินดีต้อนรับ, Admin 🎉</h1>
-  <p>เลือกฟังก์ชันจากเมนูด้านบนเพื่อเริ่มใช้งาน</p>
+  <h1>ยินดีต้อนรับ 🎉</h1>
+  <p>คุณได้เข้าสู่ระบบเรียบร้อยแล้ว</p>
 </div>
 
 <div class="footer">© Nobphanat | Version 0.0.1</div>
