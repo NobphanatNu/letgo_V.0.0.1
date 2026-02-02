@@ -13,13 +13,27 @@ body {
   margin: 0;
 }
 
+/* ===== Header Fixed ===== */
 header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: #333;
+  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #333;
-  color: white;
-  padding: 15px 20px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.left-area {
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }
 
 nav a {
@@ -29,31 +43,47 @@ nav a {
   border-radius: 5px;
 }
 
-nav a.active,
-nav a:hover {
+nav a:hover,
+nav a.active {
   background: #555;
   color: #fff;
 }
 
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logout {
+  background: #e74c3c;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+/* ===== Content ===== */
 .container {
   max-width: 400px;
   background: white;
-  margin: 50px auto;
+  margin: 110px auto 0;
   padding: 25px;
   border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 input, button {
   width: 100%;
   padding: 10px;
-  margin-top: 10px;
   font-size: 16px;
+  margin-top: 10px;
 }
 
 button {
   background: #3498db;
-  color: white;
   border: none;
+  color: white;
   border-radius: 5px;
 }
 
@@ -68,12 +98,19 @@ button {
 <body>
 
 <header>
-  <strong>คำนวณค่าคอมมิชชั่น</strong>
-  <nav>
-    <a href="dashboard.html">หน้าหลัก</a>
-    <a href="fixed_commission.html">คอมตายตัว</a>
-    <a href="percent_commission.html" class="active">คอมเปอร์เซ็นต์</a>
-  </nav>
+  <div class="left-area">
+    <strong>คำนวณค่าคอมมิชชั่น</strong>
+    <nav>
+      <a href="dashboard.html">หน้าหลัก</a>
+      <a href="fixed_commission.html">คอมตายตัว</a>
+      <a href="percent_commission.html" class="active">คอมเปอร์เซ็นต์</a>
+    </nav>
+  </div>
+
+  <div class="user-area">
+    ผู้ใช้งาน: <strong>Admin</strong>
+    <a href="index.html" class="logout">Logout</a>
+  </div>
 </header>
 
 <div class="container">
@@ -91,7 +128,6 @@ button {
 function calculate() {
   let price = document.getElementById("price").value;
   let percent = document.getElementById("percent").value;
-
   let total = price * percent / 100;
 
   document.getElementById("result").innerHTML =
