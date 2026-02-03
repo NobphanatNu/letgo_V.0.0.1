@@ -29,7 +29,31 @@ header {
 .header-top {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 12px 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logout {
+  background: #e74c3c;
+  padding: 6px 12px;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+}
+
+.logout:hover {
+  background: #c0392b;
 }
 
 .header-nav {
@@ -167,7 +191,10 @@ input {
 <header>
   <div class="header-top">
     <div class="title">เว็บไซต์บันทึกและคำนวณค่าคอมมิชชั่น</div>
-    <div>Admin | <a href="/index.html" style="color:#fff">Logout</a></div>
+    <div class="user-area">
+      ผู้ใช้งาน: <strong>Admin</strong>
+      <a href="/index.html" class="logout">Logout</a>
+    </div>
   </div>
 
   <nav class="header-nav">
