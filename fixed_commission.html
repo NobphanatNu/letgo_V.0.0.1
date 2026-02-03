@@ -102,7 +102,6 @@ th, td {
 
 th {
   background: #eee;
-  font-weight: bold;
 }
 
 input {
@@ -113,7 +112,7 @@ input {
   border-radius: 4px;
 }
 
-/* ช่องชื่อสินค้า */
+/* ชื่อสินค้า */
 .product-name input {
   text-align: left;
 }
@@ -163,6 +162,19 @@ input {
   padding: 6px 10px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/* ===== SUMMARY ===== */
+.summary {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: #fff;
+  border: 2px solid #2980b9;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* ===== FOOTER ===== */
@@ -237,6 +249,11 @@ input {
   </table>
 
   <button class="add-row" onclick="add()">➕ เพิ่มรายการ</button>
+
+  <div class="summary">
+    <div>จำนวนที่ขายได้ทั้งหมด: <span id="totalQty">0</span> ชิ้น</div>
+    <div>รวมค่าคอมทั้งหมด: <span id="grandTotal">0</span> บาท</div>
+  </div>
 </div>
 
 <div class="footer">© Nobphanat | Version 0.0.1</div>
@@ -247,6 +264,21 @@ function calc(el) {
   const commission = parseFloat(row.cells[2].querySelector("input").value) || 0;
   const qty = parseInt(row.cells[3].querySelector("input").value) || 0;
   row.querySelector(".sum").innerText = commission * qty;
+  calcTotal();
+}
+
+function calcTotal() {
+  let totalQty = 0;
+  let totalCommission = 0;
+
+  document.querySelectorAll("#tbl tr").forEach((row, i) => {
+    if (i === 0) return;
+    totalQty += parseInt(row.cells[3].querySelector("input").value) || 0;
+    totalCommission += parseFloat(row.querySelector(".sum").innerText) || 0;
+  });
+
+  document.getElementById("totalQty").innerText = totalQty.toLocaleString();
+  document.getElementById("grandTotal").innerText = totalCommission.toLocaleString();
 }
 
 function chg(btn, val) {
@@ -272,11 +304,13 @@ function add() {
     <td class="sum">0</td>
     <td><button class="delete" onclick="del(this)">ลบ</button></td>
   `;
+  calcTotal();
 }
 
 function del(btn) {
   btn.closest("tr").remove();
   updateIndex();
+  calcTotal();
 }
 
 function updateIndex() {
