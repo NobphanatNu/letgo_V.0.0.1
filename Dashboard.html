@@ -2,10 +2,13 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Commission</title>
+<title>Dashboard</title>
+
 <link href="https://fonts.googleapis.com/css2?family=TH+Sarabun+New&display=swap" rel="stylesheet">
 
 <style>
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
   font-family: 'TH Sarabun New', sans-serif;
@@ -49,6 +52,10 @@ header {
   text-decoration: none;
 }
 
+.logout:hover {
+  background: #c0392b;
+}
+
 .header-nav {
   display: flex;
   gap: 10px;
@@ -71,9 +78,35 @@ header {
 /* ===== CONTENT ===== */
 .container {
   margin-top: 130px;
+  padding: 20px;
   text-align: center;
 }
 
+h1 {
+  margin-bottom: 10px;
+}
+
+.success-text {
+  font-size: 22px;
+  color: #27ae60;
+  font-weight: bold;
+}
+
+/* ===== GIF ===== */
+.dashboard-gif {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.dashboard-gif img {
+  max-width: 320px;
+  width: 100%;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* ===== FOOTER ===== */
 .footer {
   position: fixed;
   bottom: 15px;
@@ -102,13 +135,17 @@ header {
 </header>
 
 <div class="container">
-  <h1>ยินดีต้อนรับ 🎉</h1>
-  <p>คุณได้เข้าสู่ระบบเรียบร้อยแล้ว</p>
+  <h1>Dashboard</h1>
+  <div class="success-text">คุณได้เข้าสู่ระบบเรียบร้อยแล้ว</div>
+
+  <!-- GIF ใต้ข้อความ -->
+  <div class="dashboard-gif">
+    <img src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3YTUxNXhwOXY5cGllZDh2MnRyMWtpZHYxdzEwenU0M2E3MjhtbzNjaCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/8PyTvI5EOu9LbAm8uS/giphy.gif"
+         alt="Welcome Animation">
+  </div>
 </div>
 
-<div class="footer">© Nobphanat | Version 0.0.11</div>
+<div class="footer">© Nobphanat | Version 0.0.1</div>
 
 </body>
 </html>
-
-
