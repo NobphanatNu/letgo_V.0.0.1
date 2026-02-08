@@ -24,9 +24,7 @@ body{
   box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
 
-h2{
-  text-align:center;
-}
+h2{text-align:center;}
 
 input{
   width:100%;
@@ -43,15 +41,13 @@ button{
   border:none;
   border-radius:6px;
   cursor:pointer;
-}
-
-.login-btn{
   background:#3f51b5;
   color:white;
 }
-
-.register-btn{
-  background:#eee;
+.note{
+  margin-top:15px;
+  font-size:14px;
+  color:#666;
 }
 </style>
 </head>
@@ -64,8 +60,14 @@ button{
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
 
-<button class="login-btn" onclick="loginUser()">Login</button>
-<button class="register-btn" onclick="location.href='register.html'">สมัครใช้งาน</button>
+<button onclick="loginUser()">Login</button>
+
+<div class="note">
+ทดลองใช้:<br>
+user: admin<br>
+pass: 1234
+</div>
+
 </div>
 
 <script>
@@ -74,14 +76,11 @@ function loginUser(){
   const username=document.getElementById("username").value.trim();
   const password=document.getElementById("password").value.trim();
 
-  const savedUser=localStorage.getItem("app_user");
-  const savedPass=localStorage.getItem("app_pass");
-
-  if(username===savedUser && password===savedPass){
-    localStorage.setItem("logged_in","yes");
-    window.location.href="Dashboard.html";
+  if(username==="admin" && password==="1234"){
+      localStorage.setItem("logged_in","yes");
+      window.location.href="Dashboard.html";
   }else{
-    alert("Username หรือ Password ไม่ถูกต้อง");
+      alert("Username หรือ Password ไม่ถูกต้อง");
   }
 }
 </script>
