@@ -6,76 +6,35 @@
 <title>สมัครใช้งาน</title>
 
 <style>
-body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:#f4f4f9;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.box{
-  background:white;
-  padding:30px;
-  width:320px;
-  border-radius:12px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.15);
-}
-
-input{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  font-size:16px;
-}
-
-button{
-  width:100%;
-  padding:12px;
-  margin-top:12px;
-  border:none;
-  border-radius:6px;
-  font-size:16px;
-  cursor:pointer;
-}
-
-.save{
-  background:#27ae60;
-  color:white;
-}
+body{font-family:Arial;background:#f4f4f4;display:flex;justify-content:center;align-items:center;height:100vh;}
+.card{background:white;padding:25px;border-radius:10px;width:320px;box-shadow:0 5px 15px rgba(0,0,0,.2);}
+input,button{width:100%;padding:10px;margin-top:10px;}
+button{background:#27ae60;color:white;border:none;border-radius:6px;}
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="card">
 <h2>สมัครใช้งาน</h2>
 
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
-
-<button class="save" onclick="registerUser()">สมัครใช้งาน</button>
-<button onclick="location.href='index.html'">กลับหน้า Login</button>
+<button onclick="register()">สมัครสมาชิก</button>
+<button onclick="location='index.html'">กลับ</button>
 </div>
 
 <script>
-function registerUser(){
+function register(){
+  const user=document.getElementById("username").value;
+  const pass=document.getElementById("password").value;
 
-  const username=document.getElementById("username").value.trim();
-  const password=document.getElementById("password").value.trim();
-
-  if(username==="" || password===""){
-    alert("กรุณากรอกข้อมูลให้ครบ");
-    return;
-  }
-
-  localStorage.setItem("app_user",username);
-  localStorage.setItem("app_pass",password);
+  let users=JSON.parse(localStorage.getItem("users")||"[]");
+  users.push({username:user,password:pass});
+  localStorage.setItem("users",JSON.stringify(users));
 
   alert("สมัครสำเร็จ");
-  window.location.href="index.html";
+  location="index.html";
 }
 </script>
 
