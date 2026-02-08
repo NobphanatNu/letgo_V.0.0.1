@@ -25,36 +25,41 @@ header{
   position:relative;
 }
 
+/* Hover Menu */
+.menu-area{
+  position:relative;
+  display:inline-block;
+}
+
 .menu-btn{
   cursor:pointer;
   font-size:22px;
-  margin-right:10px;
 }
 
-/* Dropdown Menu */
-#menu{
+.dropdown{
   display:none;
   position:absolute;
-  top:55px;
-  left:20px;
+  top:30px;
+  left:0;
   background:white;
   border-radius:8px;
   box-shadow:0 4px 12px rgba(0,0,0,.15);
   overflow:hidden;
+  min-width:180px;
 }
 
-#menu a{
+.dropdown a{
   display:block;
   padding:10px 15px;
   text-decoration:none;
   color:#333;
 }
 
-#menu a:hover{
+.dropdown a:hover{
   background:#f1f1f1;
 }
 
-#menu.show{
+.menu-area:hover .dropdown{
   display:block;
 }
 
@@ -114,23 +119,9 @@ button{
   cursor:pointer;
 }
 
-.add-btn{
-  background:#3498db;
-  color:white;
-  padding:8px 14px;
-}
-
-.export-btn{
-  background:#27ae60;
-  color:white;
-  padding:8px 14px;
-}
-
-.delete-btn{
-  background:#e74c3c;
-  color:white;
-  padding:6px 10px;
-}
+.add-btn{ background:#3498db;color:white;padding:8px 14px; }
+.export-btn{ background:#27ae60;color:white;padding:8px 14px; }
+.delete-btn{ background:#e74c3c;color:white;padding:6px 10px; }
 
 .qty-wrap{
   display:flex;
@@ -167,19 +158,18 @@ button{
 
 <header>
 
-<div>
-<span class="menu-btn" onclick="toggleMenu()">☰</span>
-Fixed Commission
+<div class="menu-area">
+<span class="menu-btn">☰ Fixed Commission</span>
+
+<div class="dropdown">
+<a href="dashboard.html">Dashboard</a>
+<a href="percent_commission.html">คอมแบบเปอร์เซ็นต์</a>
+</div>
 </div>
 
 <div class="user-box">
 <span id="user"></span>
 <button class="logout-btn" onclick="logout()">Logout</button>
-</div>
-
-<div id="menu">
-<a href="dashboard.html">Dashboard</a>
-<a href="percent_commission.html">คอมแบบเปอร์เซ็นต์</a>
 </div>
 
 </header>
@@ -210,7 +200,6 @@ Fixed Commission
 <td class="sum">0</td>
 <td><button class="delete-btn" onclick="removeRow(this)">X</button></td>
 </tr>
-
 </table>
 
 <br>
@@ -228,18 +217,12 @@ Fixed Commission
 </div>
 
 <script>
-
 document.getElementById("user").innerText =
 "ผู้ใช้งาน: " + localStorage.getItem("loginUser");
 
 function logout(){
  localStorage.removeItem("loginUser");
  location="index.html";
-}
-
-/* MENU */
-function toggleMenu(){
- document.getElementById("menu").classList.toggle("show");
 }
 
 function calc(el){
