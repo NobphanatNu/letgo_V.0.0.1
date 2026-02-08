@@ -22,12 +22,40 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  position:relative;
 }
 
 .menu-btn{
   cursor:pointer;
-  font-size:20px;
+  font-size:22px;
   margin-right:10px;
+}
+
+/* Dropdown Menu */
+#menu{
+  display:none;
+  position:absolute;
+  top:55px;
+  left:20px;
+  background:white;
+  border-radius:8px;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+  overflow:hidden;
+}
+
+#menu a{
+  display:block;
+  padding:10px 15px;
+  text-decoration:none;
+  color:#333;
+}
+
+#menu a:hover{
+  background:#f1f1f1;
+}
+
+#menu.show{
+  display:block;
 }
 
 .user-box{
@@ -138,14 +166,22 @@ button{
 <body>
 
 <header>
+
 <div>
-☰ Fixed Commission
+<span class="menu-btn" onclick="toggleMenu()">☰</span>
+Fixed Commission
 </div>
 
 <div class="user-box">
 <span id="user"></span>
 <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
+
+<div id="menu">
+<a href="dashboard.html">Dashboard</a>
+<a href="percent_commission.html">คอมแบบเปอร์เซ็นต์</a>
+</div>
+
 </header>
 
 <div class="container">
@@ -199,6 +235,11 @@ document.getElementById("user").innerText =
 function logout(){
  localStorage.removeItem("loginUser");
  location="index.html";
+}
+
+/* MENU */
+function toggleMenu(){
+ document.getElementById("menu").classList.toggle("show");
 }
 
 function calc(el){
