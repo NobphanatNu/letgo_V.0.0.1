@@ -27,13 +27,12 @@ header {
   z-index: 1000;
 }
 
+/* แถวบน */
 .header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 .title {
@@ -41,11 +40,23 @@ header {
   font-weight: bold;
 }
 
+/* ปุ่มเมนู 3 ขีด */
+.menu-btn {
+  font-size: 26px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 5px;
+}
+
+.menu-btn:hover {
+  background: #444;
+}
+
+/* ผู้ใช้ */
 .user-area {
   display: flex;
   align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .logout {
@@ -61,30 +72,37 @@ header {
   background: #c0392b;
 }
 
+/* ===== NAV (ซ่อนก่อน) ===== */
 .header-nav {
-  display: flex;
-  gap: 10px;
-  padding: 8px 20px;
   background: #444;
-  flex-wrap: wrap;
+  display: none;
+  flex-direction: column;
+  padding: 10px 20px;
+  animation: slideDown 0.25s ease;
 }
 
 .header-nav a {
   color: white;
   text-decoration: none;
-  padding: 6px 14px;
+  padding: 8px 10px;
   border-radius: 5px;
-  font-size: 18px;
+  font-size: 20px;
 }
 
-.header-nav a.active,
-.header-nav a:hover {
+.header-nav a:hover,
+.header-nav a.active {
   background: #666;
+}
+
+/* animation */
+@keyframes slideDown {
+  from {opacity:0; transform:translateY(-10px);}
+  to {opacity:1; transform:translateY(0);}
 }
 
 /* ===== CONTENT ===== */
 .container {
-  margin-top: 140px;
+  margin-top: 90px;
   padding: 20px;
   text-align: center;
 }
@@ -99,7 +117,7 @@ h1 {
   font-weight: bold;
 }
 
-/* ===== GIF ===== */
+/* GIF */
 .dashboard-gif {
   margin-top: 25px;
   display: flex;
@@ -113,7 +131,7 @@ h1 {
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 .footer {
   position: fixed;
   bottom: 10px;
@@ -123,30 +141,10 @@ h1 {
   opacity: 0.8;
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 600px) {
-
-  .title {
-    font-size: 18px;
-  }
-
-  .header-top {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .header-nav {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .header-nav a {
-    width: 100%;
-  }
-
-  .container {
-    margin-top: 200px;
-  }
+/* MOBILE */
+@media (max-width:600px){
+  .title { font-size:18px; }
+  .container { margin-top:80px; }
 }
 </style>
 </head>
@@ -154,19 +152,24 @@ h1 {
 <body>
 
 <header>
+
   <div class="header-top">
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
     <div class="title">เว็บไซต์บันทึกและคำนวณค่าคอมมิชชั่น</div>
+
     <div class="user-area">
       ผู้ใช้งาน: <strong>Admin</strong>
       <a href="/index.html" class="logout">Logout</a>
     </div>
   </div>
 
-  <nav class="header-nav">
+  <nav class="header-nav" id="navMenu">
     <a href="/Dashboard.html" class="active">หน้าหลัก</a>
     <a href="/fixed_commission.html">คำนวณค่าคอมตายตัว</a>
     <a href="/percent_commission.html">คำนวณค่าคอมเปอร์เซ็นต์</a>
   </nav>
+
 </header>
 
 <div class="container">
@@ -179,7 +182,18 @@ h1 {
   </div>
 </div>
 
-<div class="footer">© Nobphanat | Version 0.0.11</div>
+<div class="footer">© Nobphanat | Version 0.0.12</div>
+
+<script>
+function toggleMenu(){
+  var menu = document.getElementById("navMenu");
+  if(menu.style.display === "flex"){
+    menu.style.display = "none";
+  }else{
+    menu.style.display = "flex";
+  }
+}
+</script>
 
 </body>
 </html>
