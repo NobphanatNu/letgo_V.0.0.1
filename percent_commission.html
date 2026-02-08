@@ -6,19 +6,21 @@
 <title>Percent Commission</title>
 
 <style>
-/* ใช้ style เดียวกัน */
 body{margin:0;font-family:Arial;background:#f4f6f9;}
 header{background:#34495e;color:white;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
 .left-head{display:flex;align-items:center;gap:12px;}
 .menu-btn{font-size:20px;cursor:pointer;}
 .user-box{display:flex;align-items:center;gap:12px;}
-button{padding:7px 12px;border:none;background:#e74c3c;color:white;border-radius:6px;cursor:pointer;}
+button{padding:6px 10px;border:none;background:#e74c3c;color:white;border-radius:6px;cursor:pointer;}
 button:hover{background:#c0392b;}
 .container{max-width:900px;margin:25px auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);}
 table{width:100%;border-collapse:collapse;}
 th{background:#ecf0f1;padding:12px;}
-td{padding:10px;border-bottom:1px solid #eee;}
-input{width:100%;padding:7px;border:1px solid #ccc;border-radius:6px;}
+td{padding:8px;border-bottom:1px solid #eee;text-align:center;}
+input{width:100%;padding:6px;border:1px solid #ccc;border-radius:6px;text-align:center;}
+.qty-box{display:flex;align-items:center;gap:4px;justify-content:center;}
+.qty-btn{background:#3498db;padding:4px 8px;}
+.delete-btn{background:#e74c3c;}
 .total-row td{font-weight:bold;font-size:18px;background:#fafafa;}
 .add-btn{margin-top:12px;background:#3498db;}
 .footer{position:fixed;right:12px;bottom:6px;font-size:12px;color:#666;}
@@ -46,24 +48,20 @@ input{width:100%;padding:7px;border:1px solid #ccc;border-radius:6px;}
 <tr>
 <th>สินค้า</th>
 <th>จำนวน</th>
-<th>เปอร์เซ็นต์</th>
+<th>%</th>
+<th>ราคา</th>
 <th>รวม</th>
+<th>ลบ</th>
 </tr>
 </thead>
 
-<tbody id="tableBody">
-<tr>
-<td><input type="text"></td>
-<td><input type="number" value="1" oninput="calculate()"></td>
-<td><input type="number" value="0" oninput="calculate()"></td>
-<td class="rowTotal">0</td>
-</tr>
-</tbody>
+<tbody id="tableBody"></tbody>
 
 <tfoot>
 <tr class="total-row">
-<td colspan="3">รวมทั้งหมด</td>
+<td colspan="4">รวมทั้งหมด</td>
 <td id="grandTotal">0</td>
+<td></td>
 </tr>
 </tfoot>
 </table>
@@ -77,7 +75,6 @@ input{width:100%;padding:7px;border:1px solid #ccc;border-radius:6px;}
 <script>
 const user = localStorage.getItem("loginUser");
 if(!user){ location="index.html"; }
-
 document.getElementById("welcome").innerText="ผู้ใช้งาน: "+user;
 
 function logout(){
@@ -90,26 +87,54 @@ function calculate(){
   let grand=0;
 
   rows.forEach(row=>{
-    let qty=row.cells[1].querySelector("input").value||0;
-    let percent=row.cells[2].querySelector("input").value||0;
-    let total=qty*percent;
-    row.querySelector(".rowTotal").innerText=total;
+    let qty=row.querySelector(".qty").value||0;
+    let percent=row.querySelector(".percent").value||0;
+    let price=row.querySelector(".price").value||0;
+
+    let total=(qty*price*percent)/100;
+    row.querySelector(".rowTotal").innerText=total.toFixed(2);
     grand+=total;
   });
 
-  document.getElementById("grandTotal").innerText=grand;
+  document.getElementById("grandTotal").innerText=grand.toFixed(2);
 }
 
 function addRow(){
   let tr=document.createElement("tr");
   tr.innerHTML=`
   <td><input type="text"></td>
-  <td><input type="number" value="1" oninput="calculate()"></td>
-  <td><input type="number" value="0" oninput="calculate()"></td>
+
+  <td>
+    <div class="qty-box">
+      <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
+      <input type="number" class="qty" value="1" oninput="calculate()">
+      <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+    </div>
+  </td>
+
+  <td><input type="number" class="percent" value="0" oninput="calculate()"></td>
+  <td><input type="number" class="price" value="0" oninput="calculate()"></td>
   <td class="rowTotal">0</td>
+  <td><button class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
   `;
   document.getElementById("tableBody").appendChild(tr);
 }
+
+function deleteRow(btn){
+  btn.closest("tr").remove();
+  calculate();
+}
+
+function changeQty(btn,delta){
+  let input=btn.parentElement.querySelector(".qty");
+  let val=parseInt(input.value)||0;
+  val+=delta;
+  if(val<1) val=1;
+  input.value=val;
+  calculate();
+}
+
+addRow();
 </script>
 
 </body>
