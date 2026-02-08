@@ -8,11 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#f4f6f9;
-}
+body{margin:0;font-family:Arial;background:#f4f6f9;}
 
 header{
   background:#2c3e50;
@@ -23,13 +19,8 @@ header{
   align-items:center;
 }
 
-.menu-btn{
-  font-size:22px;
-  cursor:pointer;
-  margin-right:10px;
-}
+.menu-btn{font-size:22px;cursor:pointer;}
 
-/* Sidebar */
 .sidebar{
   position:fixed;
   top:0;
@@ -40,46 +31,20 @@ header{
   padding-top:60px;
   transition:.3s;
 }
-
 .sidebar a{
   display:block;
   padding:12px 20px;
   color:white;
   text-decoration:none;
 }
+.sidebar a:hover{background:#3f5c78;}
+.sidebar.show{left:0;}
 
-.sidebar a:hover{
-  background:#3f5c78;
-}
+.container{padding:20px;max-width:900px;margin:auto;}
 
-.sidebar.show{
-  left:0;
-}
-
-.container{
-  padding:20px;
-  max-width:900px;
-  margin:auto;
-}
-
-table{
-  width:100%;
-  background:white;
-  border-collapse:collapse;
-  margin-top:15px;
-}
-
-td,th{
-  border:1px solid #ccc;
-  padding:10px;
-  text-align:center;
-}
-
-input{
-  width:100%;
-  padding:6px;
-  box-sizing:border-box;
-}
+table{width:100%;background:white;border-collapse:collapse;margin-top:15px;}
+td,th{border:1px solid #ccc;padding:10px;text-align:center;}
+input{width:100%;padding:6px;}
 
 button{
   padding:8px 14px;
@@ -116,7 +81,10 @@ button{
     <span class="menu-btn" onclick="toggleMenu()">☰</span>
     ค่าคอมแบบเปอร์เซ็นต์
   </div>
-  <button class="logout-btn" onclick="logout()">Logout</button>
+  <div>
+    <span id="currentUser"></span>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
 </header>
 
 <div class="container">
@@ -137,6 +105,12 @@ button{
 <td><input type="number" value="1" oninput="calc(this)"></td>
 <td class="sum">0</td>
 </tr>
+
+<tr>
+<th colspan="4">รวมทั้งหมด</th>
+<th id="grandTotal">0</th>
+</tr>
+
 </table>
 
 <button class="add-btn" onclick="add()">เพิ่มแถว</button>
@@ -148,10 +122,9 @@ button{
 
 <script>
 
-if(!localStorage.getItem("loginUser")){
-  alert("กรุณา Login ก่อน");
-  location="index.html";
-}
+const user = localStorage.getItem("loginUser");
+if(!user){ alert("กรุณา Login ก่อน"); location="index.html"; }
+document.getElementById("currentUser").innerText="ผู้ใช้งาน: "+user;
 
 function toggleMenu(){
   document.getElementById("sidebar").classList.toggle("show");
@@ -170,11 +143,20 @@ function calc(el){
 
   let total=price*qty*percent/100;
   row.querySelector(".sum").innerText=total.toFixed(2);
+  calcTotal();
+}
+
+function calcTotal(){
+  let total=0;
+  document.querySelectorAll(".sum").forEach(el=>{
+    total+=parseFloat(el.innerText)||0;
+  });
+  document.getElementById("grandTotal").innerText=total.toFixed(2);
 }
 
 function add(){
   let table=document.getElementById("tbl");
-  let row=table.insertRow();
+  let row=table.insertRow(table.rows.length-1);
   row.innerHTML=`
 <td><input></td>
 <td><input type="number" value="0" oninput="calc(this)"></td>
