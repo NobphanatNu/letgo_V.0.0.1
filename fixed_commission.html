@@ -8,8 +8,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
-body{margin:0;font-family:Arial;background:#f4f6f9;}
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f6f9;
+}
 
+/* Header */
 header{
   background:#34495e;
   color:white;
@@ -19,69 +24,107 @@ header{
   align-items:center;
 }
 
-.menu-btn{cursor:pointer;font-size:20px;margin-right:10px;}
+.menu-btn{
+  cursor:pointer;
+  font-size:20px;
+  margin-right:10px;
+}
 
-.container{padding:20px;max-width:900px;margin:auto;}
+.user-box{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
+.logout-btn{
+  background:#e74c3c;
+  color:white;
+  border:none;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* Container */
+.container{
+  padding:20px;
+  max-width:900px;
+  margin:auto;
+}
+
+/* Table */
 table{
   width:100%;
   border-collapse:collapse;
   background:white;
-  border-radius:8px;
+  border-radius:10px;
   overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+th{
+  background:#f1f3f6;
 }
 
 th,td{
-  border:1px solid #ddd;
-  padding:10px;
+  padding:12px;
   text-align:center;
+  border-bottom:1px solid #eee;
 }
 
-input{width:100%;padding:6px;}
+input{
+  padding:6px;
+  width:100%;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
 
+/* Buttons */
 button{
-  padding:6px 10px;
   border:none;
   border-radius:6px;
   cursor:pointer;
 }
 
-.add-btn{background:#3498db;color:white;}
-.export-btn{background:#27ae60;color:white;}
-.delete-btn{background:#e74c3c;color:white;}
+.add-btn{
+  background:#3498db;
+  color:white;
+  padding:8px 14px;
+}
+
+.export-btn{
+  background:#27ae60;
+  color:white;
+  padding:8px 14px;
+}
+
+.delete-btn{
+  background:#e74c3c;
+  color:white;
+  padding:6px 10px;
+}
+
+.qty-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
 
 .qty-btn{
   padding:4px 8px;
-  background:#ddd;
-  margin:0 2px;
+  background:#e0e0e0;
 }
 
+/* Total */
 .total-box{
   text-align:right;
-  margin-top:10px;
   font-size:18px;
+  margin-top:15px;
+  font-weight:bold;
 }
 
-.side-menu{
-  position:fixed;
-  top:0;
-  left:-220px;
-  width:220px;
-  height:100%;
-  background:#2c3e50;
-  padding-top:60px;
-  transition:.3s;
-}
-
-.side-menu a{
-  display:block;
-  color:white;
-  padding:12px 20px;
-  text-decoration:none;
-}
-
-.side-menu a:hover{background:#34495e;}
-
+/* Footer */
 .copyright{
   position:fixed;
   bottom:8px;
@@ -94,20 +137,14 @@ button{
 
 <body>
 
-<div id="sideMenu" class="side-menu">
-<a href="dashboard.html">Dashboard</a>
-<a href="fixed_commission.html">ค่าคอมตายตัว</a>
-<a href="percent_commission.html">ค่าคอมเปอร์เซ็นต์</a>
-</div>
-
 <header>
 <div>
-<span class="menu-btn" onclick="toggleMenu()">☰</span>
-Fixed Commission
+☰ Fixed Commission
 </div>
 
-<div>
-ผู้ใช้งาน: <span id="user"></span>
+<div class="user-box">
+<span id="user"></span>
+<button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 </header>
 
@@ -115,20 +152,22 @@ Fixed Commission
 
 <table id="tbl">
 <tr>
-<th>สินค้า</th>
-<th>จำนวน</th>
-<th>ค่าคอม/ชิ้น</th>
-<th>รวม</th>
-<th>ลบ</th>
+<th style="width:40%">สินค้า</th>
+<th style="width:20%">จำนวน</th>
+<th style="width:20%">ค่าคอม/ชิ้น</th>
+<th style="width:10%">รวม</th>
+<th style="width:10%">ลบ</th>
 </tr>
 
 <tr>
 <td><input></td>
 
 <td>
+<div class="qty-wrap">
 <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
-<input type="number" value="1" oninput="calc(this)" style="width:50px;">
+<input type="number" value="1" oninput="calc(this)" style="width:60px">
 <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+</div>
 </td>
 
 <td><input type="number" value="0" oninput="calc(this)"></td>
@@ -154,11 +193,12 @@ Fixed Commission
 
 <script>
 
-document.getElementById("user").innerText = localStorage.getItem("loginUser");
+document.getElementById("user").innerText =
+"ผู้ใช้งาน: " + localStorage.getItem("loginUser");
 
-function toggleMenu(){
- let menu=document.getElementById("sideMenu");
- menu.style.left = menu.style.left==="0px" ? "-220px":"0px";
+function logout(){
+ localStorage.removeItem("loginUser");
+ location="index.html";
 }
 
 function calc(el){
@@ -193,9 +233,11 @@ function add(){
  row.innerHTML=`
 <td><input></td>
 <td>
+<div class="qty-wrap">
 <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
-<input type="number" value="1" oninput="calc(this)" style="width:50px;">
+<input type="number" value="1" oninput="calc(this)" style="width:60px">
 <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+</div>
 </td>
 <td><input type="number" value="0" oninput="calc(this)"></td>
 <td class="sum">0</td>
