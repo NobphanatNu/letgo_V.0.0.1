@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ค่าคอมแบบตายตัว</title>
+<title>Fixed Commission</title>
 
 <style>
 body{
@@ -12,8 +12,9 @@ body{
   background:#f4f6f9;
 }
 
+/* HEADER */
 header{
-  background:#2c3e50;
+  background:#34495e;
   color:white;
   padding:12px 18px;
   display:flex;
@@ -21,19 +22,46 @@ header{
   align-items:center;
 }
 
+.left-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.menu-btn{
+  font-size:20px;
+  cursor:pointer;
+}
+
+.user-box{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+button{
+  padding:7px 12px;
+  border:none;
+  background:#e74c3c;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover{ background:#c0392b; }
+
 .container{
-  max-width:1000px;
-  margin:20px auto;
+  max-width:900px;
+  margin:25px auto;
   background:white;
   padding:20px;
   border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  margin-bottom:15px;
 }
 
 th{
@@ -48,7 +76,7 @@ td{
 
 input{
   width:100%;
-  padding:8px;
+  padding:7px;
   border:1px solid #ccc;
   border-radius:6px;
 }
@@ -59,31 +87,17 @@ input{
   background:#fafafa;
 }
 
-.button-group{
-  display:flex;
-  gap:10px;
+.add-btn{
+  margin-top:12px;
+  background:#3498db;
 }
-
-button{
-  padding:10px 14px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-.add-btn{ background:#3498db; color:white; }
-.back-btn{ background:#95a5a6; color:white; }
 
 .footer{
   position:fixed;
-  right:10px;
+  right:12px;
   bottom:6px;
   font-size:12px;
   color:#666;
-}
-
-@media(max-width:600px){
-  th,td{font-size:14px;}
 }
 </style>
 </head>
@@ -91,8 +105,15 @@ button{
 <body>
 
 <header>
-<div>ผู้ใช้งาน: <span id="user"></span></div>
-<button class="back-btn" onclick="location='dashboard.html'">กลับ</button>
+  <div class="left-head">
+    <div class="menu-btn" onclick="location='dashboard.html'">☰</div>
+    <div>Fixed Commission</div>
+  </div>
+
+  <div class="user-box">
+    <span id="welcome"></span>
+    <button onclick="logout()">Logout</button>
+  </div>
 </header>
 
 <div class="container">
@@ -100,10 +121,10 @@ button{
 <table>
 <thead>
 <tr>
-<th style="width:40%">สินค้า</th>
-<th style="width:20%">จำนวน</th>
-<th style="width:20%">ค่าคอม/ชิ้น</th>
-<th style="width:20%">รวม</th>
+<th>สินค้า</th>
+<th>จำนวน</th>
+<th>ค่าคอม</th>
+<th>รวม</th>
 </tr>
 </thead>
 
@@ -124,17 +145,25 @@ button{
 </tfoot>
 </table>
 
-<div class="button-group">
 <button class="add-btn" onclick="addRow()">เพิ่มแถว</button>
-</div>
 
 </div>
 
-<div class="footer">© Nobphanat</div>
+<div class="footer">Commission System V0.1.1 © Nobphanat</div>
 
 <script>
-document.getElementById("user").innerText =
-localStorage.getItem("loginUser") || "-";
+const user = localStorage.getItem("loginUser");
+
+if(!user){
+  location="index.html";
+}
+
+document.getElementById("welcome").innerText = "ผู้ใช้งาน: " + user;
+
+function logout(){
+  localStorage.removeItem("loginUser");
+  location="index.html";
+}
 
 function calculate(){
   let rows=document.querySelectorAll("#tableBody tr");
@@ -154,10 +183,10 @@ function calculate(){
 function addRow(){
   let tr=document.createElement("tr");
   tr.innerHTML=`
-    <td><input type="text"></td>
-    <td><input type="number" value="1" oninput="calculate()"></td>
-    <td><input type="number" value="0" oninput="calculate()"></td>
-    <td class="rowTotal">0</td>
+  <td><input type="text"></td>
+  <td><input type="number" value="1" oninput="calculate()"></td>
+  <td><input type="number" value="0" oninput="calculate()"></td>
+  <td class="rowTotal">0</td>
   `;
   document.getElementById("tableBody").appendChild(tr);
 }
