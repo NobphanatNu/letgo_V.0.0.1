@@ -28,6 +28,7 @@ input,button{
   margin-top:10px;
   border-radius:8px;
   border:1px solid #ccc;
+  font-size:16px;
 }
 button{
   background:#4facfe;
@@ -35,7 +36,11 @@ button{
   border:none;
   cursor:pointer;
 }
-a{display:block;text-align:center;margin-top:10px;}
+a{
+  display:block;
+  text-align:center;
+  margin-top:10px;
+}
 </style>
 </head>
 
@@ -46,27 +51,37 @@ a{display:block;text-align:center;margin-top:10px;}
 
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
+
 <button onclick="login()">Login</button>
 <a href="register.html">สมัครใช้งาน</a>
+
+<p style="font-size:12px;color:gray;margin-top:10px;">
+User ทดลอง: Admin / @Admin
+</p>
+
 </div>
 
 <script>
 function login(){
-  const user=document.getElementById("username").value;
-  const pass=document.getElementById("password").value;
 
+  const user=document.getElementById("username").value.trim();
+  const pass=document.getElementById("password").value.trim();
+
+  // ===== Admin ทดลอง =====
   if(user==="Admin" && pass==="@Admin"){
-    localStorage.setItem("loginUser",user);
-    location="dashboard.html";
+    localStorage.setItem("loginUser","Admin");
+    window.location.href="dashboard.html";
     return;
   }
 
-  const users=JSON.parse(localStorage.getItem("users")||"[]");
-  const found=users.find(u=>u.username===user && u.password===pass);
+  // ===== ผู้ใช้ที่สมัคร =====
+  const users=JSON.parse(localStorage.getItem("users") || "[]");
+
+  const found=users.find(u => u.username===user && u.password===pass);
 
   if(found){
     localStorage.setItem("loginUser",user);
-    location="dashboard.html";
+    window.location.href="dashboard.html";
   }else{
     alert("Username หรือ Password ไม่ถูกต้อง");
   }
