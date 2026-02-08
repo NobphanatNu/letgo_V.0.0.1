@@ -2,6 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Commission</title>
 
 <link href="https://fonts.googleapis.com/css2?family=TH+Sarabun+New&display=swap" rel="stylesheet">
@@ -31,6 +32,8 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .title {
@@ -42,6 +45,7 @@ header {
   display: flex;
   align-items: center;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .logout {
@@ -61,6 +65,7 @@ header {
   gap: 10px;
   padding: 8px 20px;
   background: #444;
+  flex-wrap: wrap;
 }
 
 .header-nav a {
@@ -77,7 +82,7 @@ header {
 
 /* ===== CONTENT ===== */
 .container {
-  margin-top: 130px;
+  margin-top: 150px;
   padding: 20px;
 }
 
@@ -87,11 +92,15 @@ h1 {
 }
 
 /* ===== TABLE ===== */
+.table-wrapper {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
+  min-width: 850px;
   border-collapse: collapse;
   background: white;
-  table-layout: fixed;
 }
 
 th, td {
@@ -174,14 +183,39 @@ input {
   font-weight: bold;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 /* ===== FOOTER ===== */
 .footer {
   position: fixed;
-  bottom: 15px;
-  right: 20px;
+  bottom: 10px;
+  right: 15px;
   color: #444;
+  font-size: 14px;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-nav a {
+    width: 100%;
+  }
+
+  .container {
+    margin-top: 210px;
+  }
 }
 </style>
 </head>
@@ -207,44 +241,35 @@ input {
 <div class="container">
   <h1>คำนวณค่าคอมมิชชั่นแบบเปอร์เซ็นต์</h1>
 
-  <table id="tbl">
-    <colgroup>
-      <col style="width:5%">
-      <col style="width:25%">
-      <col style="width:15%">
-      <col style="width:10%">
-      <col style="width:10%">
-      <col style="width:15%">
-      <col style="width:10%">
-      <col style="width:10%">
-    </colgroup>
+  <div class="table-wrapper">
+    <table id="tbl">
+      <tr>
+        <th>ลำดับ</th>
+        <th>ชื่อสินค้า</th>
+        <th>ราคาขาย/ชิ้น</th>
+        <th>% คอม</th>
+        <th>จำนวน</th>
+        <th>ยอดขาย</th>
+        <th>ค่าคอม</th>
+        <th>จัดการ</th>
+      </tr>
 
-    <tr>
-      <th>ลำดับ</th>
-      <th>ชื่อสินค้า</th>
-      <th>ราคาขาย/ชิ้น</th>
-      <th>% คอม</th>
-      <th>จำนวน</th>
-      <th>ยอดขาย</th>
-      <th>ค่าคอม</th>
-      <th>จัดการ</th>
-    </tr>
-
-    <tr>
-      <td>1</td>
-      <td class="product-name"><input type="text" placeholder="ชื่อสินค้า"></td>
-      <td><input type="number" value="0" oninput="calc(this)"></td>
-      <td><input type="number" value="0" oninput="calc(this)"></td>
-      <td class="qty">
-        <button onclick="chg(this,-1)">−</button>
-        <input type="number" value="1" min="0" oninput="calc(this)">
-        <button onclick="chg(this,1)">+</button>
-      </td>
-      <td class="sale">0</td>
-      <td class="sum">0</td>
-      <td><button class="delete" onclick="del(this)">ลบ</button></td>
-    </tr>
-  </table>
+      <tr>
+        <td>1</td>
+        <td class="product-name"><input type="text" placeholder="ชื่อสินค้า"></td>
+        <td><input type="number" value="0" oninput="calc(this)"></td>
+        <td><input type="number" value="0" oninput="calc(this)"></td>
+        <td class="qty">
+          <button onclick="chg(this,-1)">−</button>
+          <input type="number" value="1" min="0" oninput="calc(this)">
+          <button onclick="chg(this,1)">+</button>
+        </td>
+        <td class="sale">0</td>
+        <td class="sum">0</td>
+        <td><button class="delete" onclick="del(this)">ลบ</button></td>
+      </tr>
+    </table>
+  </div>
 
   <button class="add-row" onclick="add()">➕ เพิ่มรายการ</button>
 
