@@ -1,28 +1,81 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register</title>
+<title>สมัครใช้งาน</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:#f4f4f9;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.box{
+  background:white;
+  padding:30px;
+  width:320px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  border:none;
+  border-radius:6px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.save{
+  background:#27ae60;
+  color:white;
+}
+</style>
 </head>
 
-<body style="font-family:Segoe UI;background:#f4f6fb;display:flex;justify-content:center;align-items:center;height:100vh;">
+<body>
 
-<div style="background:white;padding:30px;border-radius:12px;width:320px;">
+<div class="box">
 <h2>สมัครใช้งาน</h2>
 
-<input id="user" placeholder="Username" style="width:100%;padding:12px;margin-top:10px;">
-<input id="pass" type="password" placeholder="Password" style="width:100%;padding:12px;margin-top:10px;">
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
 
-<button onclick="save()" style="width:100%;padding:12px;margin-top:10px;background:#4caf50;color:white;border:none;">สมัคร</button>
-<button onclick="location='index.html'" style="width:100%;padding:12px;margin-top:10px;">กลับ</button>
+<button class="save" onclick="registerUser()">สมัครใช้งาน</button>
+<button onclick="location.href='index.html'">กลับหน้า Login</button>
 </div>
 
 <script>
-function save(){
-localStorage.user=user.value;
-localStorage.pass=pass.value;
-alert("สมัครสำเร็จ");
-location="index.html";
+function registerUser(){
+
+  const username=document.getElementById("username").value.trim();
+  const password=document.getElementById("password").value.trim();
+
+  if(username==="" || password===""){
+    alert("กรุณากรอกข้อมูลให้ครบ");
+    return;
+  }
+
+  localStorage.setItem("app_user",username);
+  localStorage.setItem("app_pass",password);
+
+  alert("สมัครสำเร็จ");
+  window.location.href="index.html";
 }
 </script>
 
