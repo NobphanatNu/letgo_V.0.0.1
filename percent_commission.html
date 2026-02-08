@@ -1,71 +1,69 @@
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
 <title>Percent Commission</title>
 
-<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
-body{margin:0;font-family:Segoe UI;background:#f4f6fb;}
-.header{background:#3f51b5;color:white;padding:15px;}
-.container{padding:20px;}
+body{font-family:Arial;background:#f4f4f4;padding:20px;}
 table{width:100%;background:white;border-collapse:collapse;}
-th,td{border:1px solid #ccc;padding:8px;text-align:center;}
-button{padding:10px;margin-top:10px;}
+td,th{border:1px solid #ccc;padding:8px;text-align:center;}
+button{padding:8px;margin-top:10px;}
 </style>
 </head>
 
 <body>
 
-<div class="header">ค่าคอมเปอร์เซ็นต์</div>
-
-<div class="container">
+<h2>ค่าคอมแบบเปอร์เซ็นต์</h2>
 
 <table id="tbl">
 <tr>
 <th>สินค้า</th>
-<th>ยอดขาย</th>
+<th>ราคา</th>
 <th>%</th>
+<th>จำนวน</th>
 <th>ค่าคอม</th>
 </tr>
 
 <tr>
 <td><input></td>
-<td><input type="number" oninput="calc(this)"></td>
-<td><input type="number" oninput="calc(this)"></td>
+<td><input type="number" value="0" oninput="calc(this)"></td>
+<td><input type="number" value="0" oninput="calc(this)"></td>
+<td><input type="number" value="1" oninput="calc(this)"></td>
 <td class="sum">0</td>
 </tr>
-
 </table>
 
-<button onclick="addRow()">เพิ่ม</button>
+<button onclick="add()">เพิ่ม</button>
 <button onclick="exportExcel()">Export Excel</button>
-
-</div>
 
 <script>
 function calc(el){
-let row=el.closest("tr");
-let sale=row.cells[1].querySelector("input").value||0;
-let percent=row.cells[2].querySelector("input").value||0;
-row.querySelector(".sum").innerText=(sale*percent/100).toFixed(2);
+  let row=el.closest("tr");
+  let price=row.cells[1].querySelector("input").value||0;
+  let percent=row.cells[2].querySelector("input").value||0;
+  let qty=row.cells[3].querySelector("input").value||0;
+
+  let total=price*qty*percent/100;
+  row.querySelector(".sum").innerText=total.toFixed(2);
 }
 
-function addRow(){
-let tbl=document.getElementById("tbl");
-let row=tbl.insertRow();
-row.innerHTML=`
+function add(){
+  let table=document.getElementById("tbl");
+  let row=table.insertRow();
+  row.innerHTML=`
 <td><input></td>
-<td><input type="number" oninput="calc(this)"></td>
-<td><input type="number" oninput="calc(this)"></td>
+<td><input type="number" value="0" oninput="calc(this)"></td>
+<td><input type="number" value="0" oninput="calc(this)"></td>
+<td><input type="number" value="1" oninput="calc(this)"></td>
 <td class="sum">0</td>`;
 }
 
 function exportExcel(){
-let table=document.getElementById("tbl");
-let wb=XLSX.utils.table_to_book(table);
-XLSX.writeFile(wb,"commission_percent.xlsx");
+  let wb=XLSX.utils.table_to_book(document.getElementById("tbl"));
+  XLSX.writeFile(wb,"percent_commission.xlsx");
 }
 </script>
 
