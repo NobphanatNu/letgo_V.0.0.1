@@ -34,3 +34,104 @@ input{width:100%;padding:6px;border:1px solid #ccc;border-radius:6px;text-align:
     <div class="menu-btn" onclick="location='dashboard.html'">☰</div>
     <div>Fixed Commission</div>
   </div>
+
+  <div class="user-box">
+    <span id="welcome"></span>
+    <button onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<div class="container">
+
+<table>
+<thead>
+<tr>
+<th>สินค้า</th>
+<th>จำนวน</th>
+<th>ค่าคอม</th>
+<th>รวม</th>
+<th>ลบ</th>
+</tr>
+</thead>
+
+<tbody id="tableBody"></tbody>
+
+<tfoot>
+<tr class="total-row">
+<td colspan="3">รวมทั้งหมด</td>
+<td id="grandTotal">0</td>
+<td></td>
+</tr>
+</tfoot>
+</table>
+
+<button class="add-btn" onclick="addRow()">เพิ่มแถว</button>
+
+</div>
+
+<div class="footer">Commission System V0.1.1 © Nobphanat</div>
+
+<script>
+const user = localStorage.getItem("loginUser");
+if(!user){ location="index.html"; }
+document.getElementById("welcome").innerText="ผู้ใช้งาน: "+user;
+
+function logout(){
+  localStorage.removeItem("loginUser");
+  location="index.html";
+}
+
+function calculate(){
+  let rows=document.querySelectorAll("#tableBody tr");
+  let grand=0;
+
+  rows.forEach(row=>{
+    let qty=row.querySelector(".qty").value||0;
+    let com=row.querySelector(".com").value||0;
+    let total=qty*com;
+    row.querySelector(".rowTotal").innerText=total;
+    grand+=total;
+  });
+
+  document.getElementById("grandTotal").innerText=grand;
+}
+
+function addRow(){
+  let tr=document.createElement("tr");
+  tr.innerHTML=`
+  <td><input type="text"></td>
+
+  <td>
+    <div class="qty-box">
+      <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
+      <input type="number" class="qty" value="1" oninput="calculate()">
+      <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+    </div>
+  </td>
+
+  <td><input type="number" class="com" value="0" oninput="calculate()"></td>
+  <td class="rowTotal">0</td>
+  <td><button class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
+  `;
+  document.getElementById("tableBody").appendChild(tr);
+}
+
+function deleteRow(btn){
+  btn.closest("tr").remove();
+  calculate();
+}
+
+function changeQty(btn,delta){
+  let input=btn.parentElement.querySelector(".qty");
+  let val=parseInt(input.value)||0;
+  val+=delta;
+  if(val<1) val=1;
+  input.value=val;
+  calculate();
+}
+
+addRow();
+</script>
+
+</body>
+</html>
