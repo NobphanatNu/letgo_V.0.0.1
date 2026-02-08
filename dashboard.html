@@ -22,6 +22,40 @@ header{
   align-items:center;
 }
 
+/* Hamburger */
+.menu-btn{
+  font-size:22px;
+  cursor:pointer;
+  margin-right:10px;
+}
+
+/* Sidebar */
+.sidebar{
+  position:fixed;
+  top:0;
+  left:-250px;
+  width:250px;
+  height:100%;
+  background:#34495e;
+  padding-top:60px;
+  transition:.3s;
+}
+
+.sidebar a{
+  display:block;
+  padding:12px 20px;
+  color:white;
+  text-decoration:none;
+}
+
+.sidebar a:hover{
+  background:#3f5c78;
+}
+
+.sidebar.show{
+  left:0;
+}
+
 .user-box{
   display:flex;
   align-items:center;
@@ -35,10 +69,6 @@ button{
   color:white;
   border-radius:6px;
   cursor:pointer;
-}
-
-button:hover{
-  background:#c0392b;
 }
 
 /* Content */
@@ -65,9 +95,10 @@ button:hover{
 }
 
 .footer{
-  text-align:center;
-  margin-top:30px;
-  color:#777;
+  position:fixed;
+  bottom:10px;
+  right:15px;
+  color:#666;
   font-size:13px;
 }
 </style>
@@ -75,8 +106,17 @@ button:hover{
 
 <body>
 
+<div id="sidebar" class="sidebar">
+  <a href="dashboard.html">หน้าหลัก</a>
+  <a href="fixed_commission.html">ค่าคอมตายตัว</a>
+  <a href="percent_commission.html">ค่าคอมเปอร์เซ็นต์</a>
+</div>
+
 <header>
-  <div>Dashboard</div>
+  <div>
+    <span class="menu-btn" onclick="toggleMenu()">☰</span>
+    Dashboard
+  </div>
 
   <div class="user-box">
     <span id="welcome"></span>
@@ -94,15 +134,11 @@ button:hover{
 📊 คำนวณค่าคอมแบบเปอร์เซ็นต์
 </div>
 
-<div class="footer">
-Commission System V0.1.1
 </div>
 
-</div>
+<div class="footer">© Nobphanat | Version 0.1.1</div>
 
 <script>
-
-// ===== ป้องกันเข้าโดยไม่ Login =====
 const user = localStorage.getItem("loginUser");
 
 if(!user){
@@ -110,7 +146,6 @@ if(!user){
   location="index.html";
 }
 
-// แสดงชื่อผู้ใช้
 document.getElementById("welcome").innerText = "ผู้ใช้งาน: " + user;
 
 function logout(){
@@ -118,6 +153,9 @@ function logout(){
   location="index.html";
 }
 
+function toggleMenu(){
+  document.getElementById("sidebar").classList.toggle("show");
+}
 </script>
 
 </body>
