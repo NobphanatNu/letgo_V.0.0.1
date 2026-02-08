@@ -5,257 +5,218 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Percent Commission</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=TH+Sarabun+New&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
-  background:#f4f6f9;
+  font-family:'TH Sarabun New',sans-serif;
+  background:#f4f6fb;
 }
 
-/* Header */
-header{
-  background:#34495e;
-  color:white;
-  padding:12px 20px;
+/* Topbar */
+.topbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  background:#fff;
+  padding:12px 18px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
-.user-box{
-  display:flex;
-  align-items:center;
-  gap:10px;
+.title{
+  font-size:22px;
+  font-weight:bold;
 }
 
-.logout-btn{
-  background:#e74c3c;
-  color:white;
+.menu-toggle{
+  font-size:22px;
   border:none;
-  padding:6px 12px;
-  border-radius:6px;
+  background:none;
   cursor:pointer;
+  display:none;
 }
 
-/* Container */
-.container{
-  padding:20px;
-  max-width:950px;
-  margin:auto;
+#menu a{
+  margin-left:15px;
+  text-decoration:none;
+  color:#333;
+  font-weight:500;
+}
+
+/* Mobile */
+@media(max-width:768px){
+  .menu-toggle{display:block;}
+
+  #menu{
+    display:none;
+    position:absolute;
+    top:55px;
+    right:10px;
+    background:#fff;
+    padding:10px;
+    border-radius:8px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  #menu a{
+    display:block;
+    margin:8px 0;
+  }
+
+  #menu.show{display:block;}
 }
 
 /* Table */
+.container{
+  padding:20px;
+}
+
 table{
   width:100%;
   border-collapse:collapse;
-  background:white;
+  background:#fff;
   border-radius:10px;
   overflow:hidden;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
-}
-
-th{
-  background:#f1f3f6;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
 }
 
 th,td{
-  padding:12px;
+  padding:10px;
   text-align:center;
   border-bottom:1px solid #eee;
 }
 
 input{
   padding:6px;
-  width:100%;
+  width:90%;
   border:1px solid #ccc;
   border-radius:6px;
 }
 
-/* Qty */
-.qty-wrap{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-}
-
-.qty-btn{
-  padding:4px 8px;
-  background:#e0e0e0;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
 /* Buttons */
-.add-btn{
-  background:#3498db;
-  color:white;
-  padding:8px 14px;
+.btn{
+  padding:6px 12px;
   border:none;
   border-radius:6px;
   cursor:pointer;
 }
 
-.export-btn{
-  background:#27ae60;
-  color:white;
-  padding:8px 14px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
+.add{background:#3498db;color:white;}
+.export{background:#2ecc71;color:white;}
+.delete{background:#e74c3c;color:white;}
 
-.delete-btn{
-  background:#e74c3c;
-  color:white;
-  padding:6px 10px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-/* Total */
-.total-box{
+.total{
   text-align:right;
-  font-size:18px;
   margin-top:15px;
-  font-weight:bold;
+  font-size:18px;
 }
 
 /* Footer */
-.copyright{
-  position:fixed;
-  bottom:8px;
-  right:12px;
-  font-size:12px;
-  color:#555;
+.footer{
+  text-align:center;
+  padding:15px;
+  margin-top:40px;
+  color:#666;
+  font-size:14px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<div>☰ Percent Commission</div>
+<header class="topbar">
+  <div class="title">Percent Commission</div>
 
-<div class="user-box">
-<span id="user"></span>
-<button class="logout-btn" onclick="logout()">Logout</button>
-</div>
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+  <nav id="menu">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="percent_commission.html">Percent</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </nav>
 </header>
 
 <div class="container">
 
-<table id="tbl">
+<table id="table">
+<thead>
 <tr>
-<th style="width:30%">สินค้า</th>
-<th style="width:15%">ราคา</th>
-<th style="width:10%">%</th>
-<th style="width:20%">จำนวน</th>
-<th style="width:15%">ค่าคอม</th>
-<th style="width:10%">ลบ</th>
+<th>สินค้า</th>
+<th>จำนวน</th>
+<th>ค่าคอมมิชชั่น</th>
+<th>รวม</th>
+<th>ลบ</th>
 </tr>
+</thead>
 
+<tbody id="tbody">
 <tr>
-<td><input></td>
-
-<td><input type="number" value="0" oninput="calc(this)"></td>
-
-<td><input type="number" value="0" oninput="calc(this)"></td>
-
-<td>
-<div class="qty-wrap">
-<button class="qty-btn" onclick="changeQty(this,-1)">-</button>
-<input type="number" value="1" oninput="calc(this)" style="width:60px">
-<button class="qty-btn" onclick="changeQty(this,1)">+</button>
-</div>
-</td>
-
+<td><input type="text"></td>
+<td><input type="number" value="1" onchange="calc()"></td>
+<td><input type="number" value="0" onchange="calc()"></td>
 <td class="sum">0</td>
-<td><button class="delete-btn" onclick="removeRow(this)">X</button></td>
-
+<td><button class="btn delete" onclick="removeRow(this)">X</button></td>
 </tr>
+</tbody>
 </table>
 
 <br>
-<button class="add-btn" onclick="add()">เพิ่มแถว</button>
-<button class="export-btn" onclick="exportExcel()">Export Excel</button>
+<button class="btn add" onclick="addRow()">เพิ่มแถว</button>
+<button class="btn export">Export Excel</button>
 
-<div class="total-box">
-รวมค่าคอมทั้งหมด: <span id="grandTotal">0</span>
+<div class="total">
+รวมทั้งหมด: <span id="grandTotal">0</span>
 </div>
 
 </div>
 
-<div class="copyright">
+<div class="footer">
 © Nobphanat | Version 0.1.1
 </div>
 
 <script>
-
-document.getElementById("user").innerText =
-"ผู้ใช้งาน: " + localStorage.getItem("loginUser");
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("show");
+}
 
 function logout(){
- localStorage.removeItem("loginUser");
- location="index.html";
+  localStorage.removeItem("loggedIn");
+  window.location.href="index.html";
 }
 
-function calc(el){
- let row=el.closest("tr");
- let price=row.cells[1].querySelector("input").value||0;
- let percent=row.cells[2].querySelector("input").value||0;
- let qty=row.cells[3].querySelector("input").value||0;
+function calc(){
+  let rows=document.querySelectorAll("#tbody tr");
+  let grand=0;
 
- let total=price*qty*percent/100;
- row.querySelector(".sum").innerText=total.toFixed(2);
- totalAll();
+  rows.forEach(row=>{
+    let qty=row.cells[1].querySelector("input").value||0;
+    let com=row.cells[2].querySelector("input").value||0;
+    let sum=qty*com;
+    row.cells[3].innerText=sum;
+    grand+=sum;
+  });
+
+  document.getElementById("grandTotal").innerText=grand;
 }
 
-function totalAll(){
- let sums=document.querySelectorAll(".sum");
- let total=0;
- sums.forEach(s=> total+=Number(s.innerText)||0);
- document.getElementById("grandTotal").innerText=total.toFixed(2);
-}
+function addRow(){
+  let tbody=document.getElementById("tbody");
+  let row=tbody.insertRow();
 
-function changeQty(btn,delta){
- let input=btn.parentElement.querySelector("input");
- input.value=Math.max(0,Number(input.value)+delta);
- calc(input);
+  row.innerHTML=`
+    <td><input type="text"></td>
+    <td><input type="number" value="1" onchange="calc()"></td>
+    <td><input type="number" value="0" onchange="calc()"></td>
+    <td class="sum">0</td>
+    <td><button class="btn delete" onclick="removeRow(this)">X</button></td>
+  `;
 }
 
 function removeRow(btn){
- btn.closest("tr").remove();
- totalAll();
+  btn.closest("tr").remove();
+  calc();
 }
-
-function add(){
- let table=document.getElementById("tbl");
- let row=table.insertRow();
- row.innerHTML=`
-<td><input></td>
-<td><input type="number" value="0" oninput="calc(this)"></td>
-<td><input type="number" value="0" oninput="calc(this)"></td>
-<td>
-<div class="qty-wrap">
-<button class="qty-btn" onclick="changeQty(this,-1)">-</button>
-<input type="number" value="1" oninput="calc(this)" style="width:60px">
-<button class="qty-btn" onclick="changeQty(this,1)">+</button>
-</div>
-</td>
-<td class="sum">0</td>
-<td><button class="delete-btn" onclick="removeRow(this)">X</button></td>`;
-}
-
-function exportExcel(){
- let wb=XLSX.utils.table_to_book(document.getElementById("tbl"));
- XLSX.writeFile(wb,"percent_commission.xlsx");
-}
-
 </script>
 
 </body>
