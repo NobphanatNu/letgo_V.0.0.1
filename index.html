@@ -1,128 +1,66 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Commission</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
 
-  <!-- โหลดฟอนต์ -->
-  <link href="https://fonts.googleapis.com/css2?family=TH+Sarabun+New&display=swap" rel="stylesheet">
+<style>
+body{
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#3f51b5,#5c6bc0);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
 
-  <style>
-    body {
-      font-family: 'TH Sarabun New', sans-serif;
-      background: #f4f4f9;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      box-sizing: border-box;
-    }
+.box{
+background:white;
+padding:30px;
+width:320px;
+border-radius:12px;
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
 
-    .container {
-      text-align: center;
-      background: #fff;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 380px;
-      box-sizing: border-box;
-    }
+input,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+font-size:16px;
+}
 
-    h1 { margin-bottom: 20px; color: #333; }
-
-    input {
-      width: 100%;
-      margin: 8px 0;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-      font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover { background: #45a049; }
-
-    p { margin-top: 15px; }
-
-    a { color: #007BFF; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    .title {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      color: #444;
-    }
-
-    .footer {
-      position: fixed;
-      bottom: 10px;
-      right: 15px;
-      font-size: 14px;
-      color: #444;
-      opacity: 0.8;
-    }
-
-    /* มือถือเล็ก */
-    @media (max-width: 480px) {
-      .container {
-        padding: 20px;
-      }
-      .title {
-        font-size: 18px;
-      }
-    }
-  </style>
+button{
+background:#3f51b5;
+color:white;
+border:none;
+border-radius:6px;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
-    <div class="title">เว็บไซต์บันทึกและคำนวณค่าคอมมิชชั่น</div>
-    <h1>เข้าสู่ระบบ</h1>
+<div class="box">
+<h2>เข้าสู่ระบบ</h2>
 
-    <form id="loginForm">
-      <input type="text" id="loginUsername" placeholder="ชื่อผู้ใช้" required>
-      <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
-      <button type="submit">ล็อกอิน</button>
-    </form>
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
 
-    <p>ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิกที่นี่</a></p>
-    <div id="result"></div>
-  </div>
+<button onclick="login()">Login</button>
+<button onclick="location='register.html'">สมัครใช้งาน</button>
+</div>
 
-  <div class="footer">
-    © Nobphanat | Version 0.0.12
-  </div>
-
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const username = document.getElementById("loginUsername").value;
-      const password = document.getElementById("loginPassword").value;
-
-      if (username === "Admin" && password === "@Admin") {
-        window.location.href = "Dashboard.html";
-      } else {
-        document.getElementById("result").innerText = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
-      }
-    });
-  </script>
+<script>
+function login(){
+if(user.value===localStorage.user && pass.value===localStorage.pass){
+localStorage.login="1";
+location="dashboard.html";
+}else{
+alert("ข้อมูลไม่ถูกต้อง");
+}
+}
+</script>
 
 </body>
 </html>
