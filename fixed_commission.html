@@ -5,132 +5,207 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fixed Commission</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f9;}
-header{background:#34495e;color:white;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
-.left-head{display:flex;align-items:center;gap:12px;}
-.menu-btn{font-size:20px;cursor:pointer;}
-.user-box{display:flex;align-items:center;gap:12px;}
-button{padding:6px 10px;border:none;background:#e74c3c;color:white;border-radius:6px;cursor:pointer;}
-button:hover{background:#c0392b;}
-.container{max-width:900px;margin:25px auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);}
-table{width:100%;border-collapse:collapse;}
-th{background:#ecf0f1;padding:12px;}
-td{padding:8px;border-bottom:1px solid #eee;text-align:center;}
-input{width:100%;padding:6px;border:1px solid #ccc;border-radius:6px;text-align:center;}
-.qty-box{display:flex;align-items:center;gap:4px;justify-content:center;}
-.qty-btn{background:#3498db;padding:4px 8px;}
-.delete-btn{background:#e74c3c;}
-.total-row td{font-weight:bold;font-size:18px;background:#fafafa;}
-.add-btn{margin-top:12px;background:#3498db;}
-.footer{position:fixed;right:12px;bottom:6px;font-size:12px;color:#666;}
+
+header{
+  background:#34495e;
+  color:white;
+  padding:12px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.menu-btn{cursor:pointer;font-size:20px;margin-right:10px;}
+
+.container{padding:20px;max-width:900px;margin:auto;}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:white;
+  border-radius:8px;
+  overflow:hidden;
+}
+
+th,td{
+  border:1px solid #ddd;
+  padding:10px;
+  text-align:center;
+}
+
+input{width:100%;padding:6px;}
+
+button{
+  padding:6px 10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.add-btn{background:#3498db;color:white;}
+.export-btn{background:#27ae60;color:white;}
+.delete-btn{background:#e74c3c;color:white;}
+
+.qty-btn{
+  padding:4px 8px;
+  background:#ddd;
+  margin:0 2px;
+}
+
+.total-box{
+  text-align:right;
+  margin-top:10px;
+  font-size:18px;
+}
+
+.side-menu{
+  position:fixed;
+  top:0;
+  left:-220px;
+  width:220px;
+  height:100%;
+  background:#2c3e50;
+  padding-top:60px;
+  transition:.3s;
+}
+
+.side-menu a{
+  display:block;
+  color:white;
+  padding:12px 20px;
+  text-decoration:none;
+}
+
+.side-menu a:hover{background:#34495e;}
+
+.copyright{
+  position:fixed;
+  bottom:8px;
+  right:12px;
+  font-size:12px;
+  color:#555;
+}
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="left-head">
-    <div class="menu-btn" onclick="location='dashboard.html'">☰</div>
-    <div>Fixed Commission</div>
-  </div>
+<div id="sideMenu" class="side-menu">
+<a href="dashboard.html">Dashboard</a>
+<a href="fixed_commission.html">ค่าคอมตายตัว</a>
+<a href="percent_commission.html">ค่าคอมเปอร์เซ็นต์</a>
+</div>
 
-  <div class="user-box">
-    <span id="welcome"></span>
-    <button onclick="logout()">Logout</button>
-  </div>
+<header>
+<div>
+<span class="menu-btn" onclick="toggleMenu()">☰</span>
+Fixed Commission
+</div>
+
+<div>
+ผู้ใช้งาน: <span id="user"></span>
+</div>
 </header>
 
 <div class="container">
 
-<table>
-<thead>
+<table id="tbl">
 <tr>
 <th>สินค้า</th>
 <th>จำนวน</th>
-<th>ค่าคอม</th>
+<th>ค่าคอม/ชิ้น</th>
 <th>รวม</th>
 <th>ลบ</th>
 </tr>
-</thead>
 
-<tbody id="tableBody"></tbody>
+<tr>
+<td><input></td>
 
-<tfoot>
-<tr class="total-row">
-<td colspan="3">รวมทั้งหมด</td>
-<td id="grandTotal">0</td>
-<td></td>
+<td>
+<button class="qty-btn" onclick="changeQty(this,-1)">-</button>
+<input type="number" value="1" oninput="calc(this)" style="width:50px;">
+<button class="qty-btn" onclick="changeQty(this,1)">+</button>
+</td>
+
+<td><input type="number" value="0" oninput="calc(this)"></td>
+<td class="sum">0</td>
+<td><button class="delete-btn" onclick="removeRow(this)">X</button></td>
 </tr>
-</tfoot>
+
 </table>
 
-<button class="add-btn" onclick="addRow()">เพิ่มแถว</button>
+<br>
+<button class="add-btn" onclick="add()">เพิ่มแถว</button>
+<button class="export-btn" onclick="exportExcel()">Export Excel</button>
+
+<div class="total-box">
+รวมทั้งหมด: <span id="grandTotal">0</span>
+</div>
 
 </div>
 
-<div class="footer">Commission System V0.1.1 © Nobphanat</div>
+<div class="copyright">
+© Nobphanat | Version 0.1.1
+</div>
 
 <script>
-const user = localStorage.getItem("loginUser");
-if(!user){ location="index.html"; }
-document.getElementById("welcome").innerText="ผู้ใช้งาน: "+user;
 
-function logout(){
-  localStorage.removeItem("loginUser");
-  location="index.html";
+document.getElementById("user").innerText = localStorage.getItem("loginUser");
+
+function toggleMenu(){
+ let menu=document.getElementById("sideMenu");
+ menu.style.left = menu.style.left==="0px" ? "-220px":"0px";
 }
 
-function calculate(){
-  let rows=document.querySelectorAll("#tableBody tr");
-  let grand=0;
-
-  rows.forEach(row=>{
-    let qty=row.querySelector(".qty").value||0;
-    let com=row.querySelector(".com").value||0;
-    let total=qty*com;
-    row.querySelector(".rowTotal").innerText=total;
-    grand+=total;
-  });
-
-  document.getElementById("grandTotal").innerText=grand;
+function calc(el){
+ let row=el.closest("tr");
+ let qty=row.cells[1].querySelector("input").value||0;
+ let price=row.cells[2].querySelector("input").value||0;
+ row.querySelector(".sum").innerText=qty*price;
+ totalAll();
 }
 
-function addRow(){
-  let tr=document.createElement("tr");
-  tr.innerHTML=`
-  <td><input type="text"></td>
-
-  <td>
-    <div class="qty-box">
-      <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
-      <input type="number" class="qty" value="1" oninput="calculate()">
-      <button class="qty-btn" onclick="changeQty(this,1)">+</button>
-    </div>
-  </td>
-
-  <td><input type="number" class="com" value="0" oninput="calculate()"></td>
-  <td class="rowTotal">0</td>
-  <td><button class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
-  `;
-  document.getElementById("tableBody").appendChild(tr);
-}
-
-function deleteRow(btn){
-  btn.closest("tr").remove();
-  calculate();
+function totalAll(){
+ let sums=document.querySelectorAll(".sum");
+ let total=0;
+ sums.forEach(s=> total+=Number(s.innerText)||0);
+ document.getElementById("grandTotal").innerText=total;
 }
 
 function changeQty(btn,delta){
-  let input=btn.parentElement.querySelector(".qty");
-  let val=parseInt(input.value)||0;
-  val+=delta;
-  if(val<1) val=1;
-  input.value=val;
-  calculate();
+ let input=btn.parentElement.querySelector("input");
+ input.value=Math.max(0,Number(input.value)+delta);
+ calc(input);
 }
 
-addRow();
+function removeRow(btn){
+ btn.closest("tr").remove();
+ totalAll();
+}
+
+function add(){
+ let table=document.getElementById("tbl");
+ let row=table.insertRow();
+ row.innerHTML=`
+<td><input></td>
+<td>
+<button class="qty-btn" onclick="changeQty(this,-1)">-</button>
+<input type="number" value="1" oninput="calc(this)" style="width:50px;">
+<button class="qty-btn" onclick="changeQty(this,1)">+</button>
+</td>
+<td><input type="number" value="0" oninput="calc(this)"></td>
+<td class="sum">0</td>
+<td><button class="delete-btn" onclick="removeRow(this)">X</button></td>`;
+}
+
+function exportExcel(){
+ let wb=XLSX.utils.table_to_book(document.getElementById("tbl"));
+ XLSX.writeFile(wb,"fixed_commission.xlsx");
+}
 </script>
 
 </body>
