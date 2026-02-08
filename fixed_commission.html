@@ -32,8 +32,6 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 .title {
@@ -41,11 +39,22 @@ header {
   font-weight: bold;
 }
 
+/* ปุ่ม 3 ขีด */
+.menu-btn {
+  font-size: 26px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 5px;
+}
+
+.menu-btn:hover {
+  background: #444;
+}
+
 .user-area {
   display: flex;
   align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .logout {
@@ -60,29 +69,36 @@ header {
   background: #c0392b;
 }
 
+/* ===== NAV ===== */
 .header-nav {
-  display: flex;
-  gap: 10px;
-  padding: 8px 20px;
   background: #444;
-  flex-wrap: wrap;
+  display: none;
+  flex-direction: column;
+  padding: 10px 20px;
+  animation: slideDown 0.25s ease;
 }
 
 .header-nav a {
   color: white;
   text-decoration: none;
-  padding: 6px 14px;
+  padding: 8px 10px;
   border-radius: 5px;
+  font-size: 20px;
 }
 
-.header-nav a.active,
-.header-nav a:hover {
+.header-nav a:hover,
+.header-nav a.active {
   background: #666;
+}
+
+@keyframes slideDown {
+  from {opacity:0; transform:translateY(-10px);}
+  to {opacity:1; transform:translateY(0);}
 }
 
 /* ===== CONTENT ===== */
 .container {
-  margin-top: 150px;
+  margin-top: 90px;
   padding: 20px;
 }
 
@@ -121,12 +137,10 @@ input {
   border-radius: 4px;
 }
 
-/* ชื่อสินค้า */
 .product-name input {
   text-align: left;
 }
 
-/* จำนวน */
 .qty {
   display: flex;
   justify-content: center;
@@ -197,26 +211,9 @@ input {
   color: #444;
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 600px) {
-
-  .header-top {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .header-nav {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .header-nav a {
-    width: 100%;
-  }
-
-  .container {
-    margin-top: 210px;
-  }
+/* MOBILE */
+@media (max-width:600px){
+  .container { margin-top:80px; }
 }
 </style>
 </head>
@@ -225,14 +222,19 @@ input {
 
 <header>
   <div class="header-top">
+
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
     <div class="title">เว็บไซต์บันทึกและคำนวณค่าคอมมิชชั่น</div>
+
     <div class="user-area">
       ผู้ใช้งาน: <strong>Admin</strong>
       <a href="/index.html" class="logout">Logout</a>
     </div>
+
   </div>
 
-  <nav class="header-nav">
+  <nav class="header-nav" id="navMenu">
     <a href="/Dashboard.html">หน้าหลัก</a>
     <a href="/fixed_commission.html" class="active">คำนวณค่าคอมตายตัว</a>
     <a href="/percent_commission.html">คำนวณค่าคอมเปอร์เซ็นต์</a>
@@ -255,21 +257,15 @@ input {
 
       <tr>
         <td>1</td>
-        <td class="product-name">
-          <input type="text" placeholder="ชื่อสินค้า">
-        </td>
-        <td>
-          <input type="number" value="0" oninput="calc(this)">
-        </td>
+        <td class="product-name"><input type="text" placeholder="ชื่อสินค้า"></td>
+        <td><input type="number" value="0" oninput="calc(this)"></td>
         <td class="qty">
           <button onclick="chg(this,-1)">−</button>
           <input type="number" value="1" min="0" oninput="calc(this)">
           <button onclick="chg(this,1)">+</button>
         </td>
         <td class="sum">0</td>
-        <td>
-          <button class="delete" onclick="del(this)">ลบ</button>
-        </td>
+        <td><button class="delete" onclick="del(this)">ลบ</button></td>
       </tr>
     </table>
   </div>
@@ -282,9 +278,14 @@ input {
   </div>
 </div>
 
-<div class="footer">© Nobphanat | Version 0.0.11</div>
+<div class="footer">© Nobphanat | Version 0.0.12</div>
 
 <script>
+function toggleMenu(){
+  var menu = document.getElementById("navMenu");
+  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+}
+
 function calc(el) {
   const row = el.closest("tr");
   const commission = parseFloat(row.cells[2].querySelector("input").value) || 0;
