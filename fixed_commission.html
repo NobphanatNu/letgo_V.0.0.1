@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fixed Commission - V0.1.1</title>
+<title>Fixed Commission</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -24,28 +24,40 @@ header{
   align-items:center;
 }
 
-.user-box{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-button{
-  padding:8px 14px;
-  border:none;
-  border-radius:6px;
+.menu-btn{
+  font-size:22px;
   cursor:pointer;
+  margin-right:10px;
 }
 
-.logout{
-  background:#e74c3c;
+/* Sidebar */
+.sidebar{
+  position:fixed;
+  top:0;
+  left:-250px;
+  width:250px;
+  height:100%;
+  background:#34495e;
+  padding-top:60px;
+  transition:.3s;
+}
+
+.sidebar a{
+  display:block;
+  padding:12px 20px;
   color:white;
+  text-decoration:none;
 }
 
-.logout:hover{
-  background:#c0392b;
+.sidebar a:hover{
+  background:#3f5c78;
 }
 
+.sidebar.show{
+  left:0;
+}
+
+/* Content */
 .container{
   padding:20px;
   max-width:900px;
@@ -56,7 +68,7 @@ table{
   width:100%;
   background:white;
   border-collapse:collapse;
-  box-shadow:0 3px 10px rgba(0,0,0,.1);
+  margin-top:15px;
 }
 
 td,th{
@@ -65,48 +77,48 @@ td,th{
   text-align:center;
 }
 
-th{
-  background:#ecf0f1;
-}
-
 input{
   width:100%;
   padding:6px;
   box-sizing:border-box;
 }
 
-.actions{
-  margin-top:15px;
-  display:flex;
-  gap:10px;
+button{
+  padding:8px 14px;
+  margin-top:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-.add{
-  background:#27ae60;
-  color:white;
-}
+.add-btn{background:#3498db;color:white;}
+.export-btn{background:#27ae60;color:white;}
+.logout-btn{background:#e74c3c;color:white;}
 
-.export{
-  background:#2980b9;
-  color:white;
-}
-
-.delete{
-  background:#e74c3c;
-  color:white;
+.footer{
+  position:fixed;
+  bottom:10px;
+  right:15px;
+  color:#666;
+  font-size:13px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div>คำนวณค่าคอมแบบตายตัว</div>
+<div id="sidebar" class="sidebar">
+  <a href="dashboard.html">หน้าหลัก</a>
+  <a href="fixed_commission.html">ค่าคอมตายตัว</a>
+  <a href="percent_commission.html">ค่าคอมเปอร์เซ็นต์</a>
+</div>
 
-  <div class="user-box">
-    <span id="welcome"></span>
-    <button class="logout" onclick="logout()">Logout</button>
+<header>
+  <div>
+    <span class="menu-btn" onclick="toggleMenu()">☰</span>
+    ค่าคอมแบบตายตัว
   </div>
+  <button class="logout-btn" onclick="logout()">Logout</button>
 </header>
 
 <div class="container">
@@ -117,7 +129,6 @@ input{
 <th>จำนวน</th>
 <th>ค่าคอม/ชิ้น</th>
 <th>รวม</th>
-<th>ลบ</th>
 </tr>
 
 <tr>
@@ -125,35 +136,33 @@ input{
 <td><input type="number" value="1" oninput="calc(this)"></td>
 <td><input type="number" value="0" oninput="calc(this)"></td>
 <td class="sum">0</td>
-<td><button class="delete" onclick="delRow(this)">ลบ</button></td>
 </tr>
 </table>
 
-<div class="actions">
-<button class="add" onclick="add()">เพิ่มรายการ</button>
-<button class="export" onclick="exportExcel()">Export Excel</button>
-</div>
+<button class="add-btn" onclick="add()">เพิ่มแถว</button>
+<button class="export-btn" onclick="exportExcel()">Export Excel</button>
 
 </div>
+
+<div class="footer">© Nobphanat | Version 0.1.1</div>
 
 <script>
 
-// ===== ป้องกันเข้าโดยไม่ Login =====
-const user = localStorage.getItem("loginUser");
-
-if(!user){
+// ตรวจ Login
+if(!localStorage.getItem("loginUser")){
   alert("กรุณา Login ก่อน");
   location="index.html";
 }
 
-document.getElementById("welcome").innerText = "ผู้ใช้งาน: " + user;
+function toggleMenu(){
+  document.getElementById("sidebar").classList.toggle("show");
+}
 
 function logout(){
   localStorage.removeItem("loginUser");
   location="index.html";
 }
 
-// ===== คำนวณ =====
 function calc(el){
   let row=el.closest("tr");
   let qty=row.cells[1].querySelector("input").value||0;
@@ -161,25 +170,16 @@ function calc(el){
   row.querySelector(".sum").innerText=qty*price;
 }
 
-// ===== เพิ่มแถว =====
 function add(){
   let table=document.getElementById("tbl");
   let row=table.insertRow();
-
   row.innerHTML=`
 <td><input></td>
 <td><input type="number" value="1" oninput="calc(this)"></td>
 <td><input type="number" value="0" oninput="calc(this)"></td>
-<td class="sum">0</td>
-<td><button class="delete" onclick="delRow(this)">ลบ</button></td>`;
+<td class="sum">0</td>`;
 }
 
-// ===== ลบแถว =====
-function delRow(btn){
-  btn.closest("tr").remove();
-}
-
-// ===== Export Excel =====
 function exportExcel(){
   let wb=XLSX.utils.table_to_book(document.getElementById("tbl"));
   XLSX.writeFile(wb,"fixed_commission.xlsx");
