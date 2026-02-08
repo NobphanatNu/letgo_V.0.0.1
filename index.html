@@ -3,84 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login</title>
+<title>Login - Commission V0.1.1</title>
 
 <style>
 body{
   margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#3f51b5,#5c6bc0);
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#4facfe,#00f2fe);
   height:100vh;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
 }
-
-.login-box{
+.card{
   background:white;
   padding:30px;
-  width:320px;
   border-radius:12px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  width:320px;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
 }
-
-h2{text-align:center;}
-
-input{
+input,button{
   width:100%;
-  padding:12px;
+  padding:10px;
   margin-top:10px;
-  font-size:16px;
+  border-radius:8px;
+  border:1px solid #ccc;
 }
-
 button{
-  width:100%;
-  padding:12px;
-  margin-top:12px;
-  font-size:16px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  background:#3f51b5;
+  background:#4facfe;
   color:white;
+  border:none;
+  cursor:pointer;
 }
-.note{
-  margin-top:15px;
-  font-size:14px;
-  color:#666;
-}
+a{display:block;text-align:center;margin-top:10px;}
 </style>
 </head>
 
 <body>
 
-<div class="login-box">
+<div class="card">
 <h2>เข้าสู่ระบบ</h2>
 
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
-
-<button onclick="loginUser()">Login</button>
-
-<div class="note">
-ทดลองใช้:<br>
-user: admin<br>
-pass: 1234
-</div>
-
+<button onclick="login()">Login</button>
+<a href="register.html">สมัครใช้งาน</a>
 </div>
 
 <script>
-function loginUser(){
+function login(){
+  const user=document.getElementById("username").value;
+  const pass=document.getElementById("password").value;
 
-  const username=document.getElementById("username").value.trim();
-  const password=document.getElementById("password").value.trim();
+  if(user==="Admin" && pass==="@Admin"){
+    localStorage.setItem("loginUser",user);
+    location="dashboard.html";
+    return;
+  }
 
-  if(username==="admin" && password==="1234"){
-      localStorage.setItem("logged_in","yes");
-      window.location.href="Dashboard.html";
+  const users=JSON.parse(localStorage.getItem("users")||"[]");
+  const found=users.find(u=>u.username===user && u.password===pass);
+
+  if(found){
+    localStorage.setItem("loginUser",user);
+    location="dashboard.html";
   }else{
-      alert("Username หรือ Password ไม่ถูกต้อง");
+    alert("Username หรือ Password ไม่ถูกต้อง");
   }
 }
 </script>
