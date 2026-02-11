@@ -5,11 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>สมัครใช้งาน</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
-body{font-family:Arial;background:#f4f4f4;display:flex;justify-content:center;align-items:center;height:100vh;}
-.card{background:white;padding:25px;border-radius:10px;width:320px;box-shadow:0 5px 15px rgba(0,0,0,.2);}
-input,button{width:100%;padding:10px;margin-top:10px;}
-button{background:#27ae60;color:white;border:none;border-radius:6px;}
+*{
+  box-sizing:border-box;
+  font-family:'Kanit',sans-serif;
+}
+
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
+
+/* กล่องสมัคร */
+.card{
+  background:white;
+  padding:30px 25px;
+  border-radius:16px;
+  width:340px;
+  max-width:90%;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+  animation:fadeIn .5s ease;
+}
+
+.card h2{
+  margin:0 0 15px;
+  text-align:center;
+  font-weight:500;
+  color:#333;
+}
+
+/* input */
+input{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  font-size:14px;
+  transition:.2s;
+}
+
+input:focus{
+  outline:none;
+  border-color:#4facfe;
+  box-shadow:0 0 0 2px rgba(79,172,254,.2);
+}
+
+/* ปุ่ม */
+button{
+  width:100%;
+  padding:12px;
+  margin-top:14px;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.register-btn{
+  background:#27ae60;
+  color:white;
+}
+
+.register-btn:hover{
+  background:#219150;
+}
+
+.back-btn{
+  background:#e0e0e0;
+}
+
+.back-btn:hover{
+  background:#d5d5d5;
+}
+
+/* animation */
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(15px);}
+  to{opacity:1;transform:translateY(0);}
+}
 </style>
 </head>
 
@@ -20,14 +101,20 @@ button{background:#27ae60;color:white;border:none;border-radius:6px;}
 
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
-<button onclick="register()">สมัครสมาชิก</button>
-<button onclick="location='index.html'">กลับ</button>
+
+<button class="register-btn" onclick="register()">สมัครสมาชิก</button>
+<button class="back-btn" onclick="location='index.html'">กลับ</button>
 </div>
 
 <script>
 function register(){
   const user=document.getElementById("username").value;
   const pass=document.getElementById("password").value;
+
+  if(!user || !pass){
+    alert("กรุณากรอกข้อมูลให้ครบ");
+    return;
+  }
 
   let users=JSON.parse(localStorage.getItem("users")||"[]");
   users.push({username:user,password:pass});
