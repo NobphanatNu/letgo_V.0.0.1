@@ -281,9 +281,36 @@ function add(){
 <td><button class="delete-btn" onclick="removeRow(this)">X</button></td>`;
 }
 
+/* ===== แก้เฉพาะ Export ===== */
 function exportExcel(){
- let wb=XLSX.utils.table_to_book(document.getElementById("tbl"));
- XLSX.writeFile(wb,"fixed_commission.xlsx");
+
+  let table=document.getElementById("tbl");
+  let rows=table.querySelectorAll("tr");
+
+  let data=[["สินค้า","จำนวน","ค่าคอม/ชิ้น","รวม"]];
+
+  rows.forEach((row,index)=>{
+    if(index===0) return; // ข้าม header
+
+    let product=row.cells[0].querySelector("input")?.value || "";
+    let qty=row.cells[1].querySelector("input")?.value || 0;
+    let price=row.cells[2].querySelector("input")?.value || 0;
+    let sum=row.querySelector(".sum")?.innerText || 0;
+
+    if(product!=="" || qty>0 || price>0){
+      data.push([product, Number(qty), Number(price), Number(sum)]);
+    }
+  });
+
+  // เพิ่มรวมทั้งหมดท้ายไฟล์
+  data.push([]);
+  data.push(["รวมทั้งหมด","","",Number(document.getElementById("grandTotal").innerText)]);
+
+  let ws=XLSX.utils.aoa_to_sheet(data);
+  let wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,"Commission");
+
+  XLSX.writeFile(wb,"fixed_commission.xlsx");
 }
 
 </script>
