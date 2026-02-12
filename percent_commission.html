@@ -197,7 +197,6 @@ input{
 <div id="overlay" onclick="toggleMenu()"></div>
 
 <header>
-
 <div>
 <span class="menu-btn" onclick="toggleMenu()">☰</span>
 Percent Commission
@@ -207,7 +206,6 @@ Percent Commission
 <span id="user"></span>
 <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
-
 </header>
 
 <div class="container">
@@ -250,7 +248,7 @@ Percent Commission
 </div>
 
 <div class="copyright">
-© Nobphanat | Version 0.1.1
+© Nobphanat | Version 0.1.2
 </div>
 
 <script>
@@ -315,9 +313,32 @@ function add(){
 <td><button class="delete-btn" onclick="removeRow(this)">X</button></td>`;
 }
 
+/* ===== Export Excel เวอร์ชันแก้แล้ว ===== */
 function exportExcel(){
- let wb=XLSX.utils.table_to_book(document.getElementById("tbl"));
- XLSX.writeFile(wb,"percent_commission.xlsx");
+
+  let table = document.getElementById("tbl").cloneNode(true);
+
+  // แปลง input เป็น text
+  table.querySelectorAll("input").forEach(input=>{
+    let td = input.parentElement;
+    td.innerText = input.value;
+  });
+
+  // ลบปุ่ม
+  table.querySelectorAll("button").forEach(btn=>{
+    btn.remove();
+  });
+
+  // เพิ่มแถวรวม
+  let total = document.getElementById("grandTotal").innerText;
+  let row = table.insertRow();
+  let cell = row.insertCell(0);
+  cell.colSpan = 6;
+  cell.style.textAlign = "right";
+  cell.innerText = "รวมค่าคอมทั้งหมด : " + total;
+
+  let wb = XLSX.utils.table_to_book(table);
+  XLSX.writeFile(wb,"percent_commission.xlsx");
 }
 
 </script>
